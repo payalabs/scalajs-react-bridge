@@ -30,11 +30,12 @@ div(
 
 1. Clone this repository
 2. Publish to local sbt repository
-```
+ ```
 $ sbt publish
 ```
+
 3. Add the following dependency to your scalajs-react project
-```scala
+ ```scala
 libraryDependencies += "com.payalabs" %%% "scalajs-react-bridge" % "0.1.0"
 ```
 
