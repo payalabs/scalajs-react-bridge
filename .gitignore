@@ -1,0 +1,8 @@
+target/
+.cache
+.classpath
+.project
+.settings/
+.idea/
+bower_components/
+node_modules/
