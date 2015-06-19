@@ -49,7 +49,8 @@ This core class `ReactBridgeComponent` assumes that the classes extending it fol
   type. For example, if the underlying component expects a string property, then the parameter type must be `String`. The bridge automatically translates parameters with `Seq` type (or its subtypes) to js array and `Map` types to js literal (currently makes an unchecked assumption that the key is of the String type).
 
 ## Example components
-- [ReactMediumEditor](https://github.com/payalabs/scalajs-react-bridge-example/src/main/scala/com/payalabs/scalajs/react/bridge/elements/ReactMediumEditor.scala)
-- [TagsInput](https://github.com/payalabs/scalajs-react-bridge-example/src/main/scala/com/payalabs/scalajs/react/bridge/elements/TagsInput.scala)
-- [Bootstrap Button](https://github.com/payalabs/scalajs-react-bridge-example/src/main/scala/com/payalabs/scalajs/react/bridge/elements/Button.scala)
-- [Bootstrap Input](https://github.com/payalabs/scalajs-react-bridge-example/src/main/scala/com/payalabs/scalajs/react/bridge/elements/Input.scala)
+
+- [ReactMediumEditor](https://github.com/payalabs/scalajs-react-bridge-example/blob/master/src/main/scala/com/payalabs/scalajs/react/bridge/elements/ReactMediumEditor.scala)
+- [TagsInput](https://github.com/payalabs/scalajs-react-bridge-example/blob/master/src/main/scala/com/payalabs/scalajs/react/bridge/elements/TagsInput.scala)
+- [Bootstrap Button](https://github.com/payalabs/scalajs-react-bridge-example/blob/master/src/main/scala/com/payalabs/scalajs/react/bridge/elements/Button.scala)
+- [Bootstrap Input](https://github.com/payalabs/scalajs-react-bridge-example/blob/master/src/main/scala/com/payalabs/scalajs/react/bridge/elements/Input.scala)
