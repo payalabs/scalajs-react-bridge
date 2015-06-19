@@ -4,7 +4,6 @@ A simple way to make React components in the wild usable in [scalajs-react](http
 
 For example, to create a component corresponding to [react-tagsinput](https://github.com/olahol/react-tagsinput), define a class as follows:
 
-
 ```scala
 case class TagsInput(id: js.UndefOr[String]  = js.undefined,
                      className: js.UndefOr[String] = js.undefined,
@@ -30,7 +29,6 @@ div(
 ## Getting started
 
 1. Clone this repository
-
 2. Publish to local sbt repository
 ```
 $ sbt publish
@@ -49,6 +47,8 @@ This core class `ReactBridgeComponent` assumes that the classes extending it fol
   type. For example, if the underlying component expects a string property, then the parameter type must be `String`. The bridge automatically translates parameters with `Seq` type (or its subtypes) to js array and `Map` types to js literal (currently makes an unchecked assumption that the key is of the String type).
 
 ## Example components
+
+### [See them live](https://payalabs.github.io/scalajs-react-bridge-example)
 
 - [ReactMediumEditor](https://github.com/payalabs/scalajs-react-bridge-example/blob/master/src/main/scala/com/payalabs/scalajs/react/bridge/elements/ReactMediumEditor.scala)
 - [TagsInput](https://github.com/payalabs/scalajs-react-bridge-example/blob/master/src/main/scala/com/payalabs/scalajs/react/bridge/elements/TagsInput.scala)
