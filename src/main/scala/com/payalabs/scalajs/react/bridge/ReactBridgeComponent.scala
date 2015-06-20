@@ -120,7 +120,7 @@ object ReactBridgeComponent {
   }
 
   private def toAny: PartialFunction[Any, js.Any] = {
-    case obj: ReactBridgeObject => obj.toJS
+    case obj: ReactBridgeObject => obj.toJs
     case value => value.asInstanceOf[js.Any]
   }
 }
@@ -132,5 +132,5 @@ object ReactBridgeComponent {
  * while still meeting expectations of the underlying component.
  */
 trait ReactBridgeObject extends Any {
-  def toJS : js.Any
+  def toJs : js.Any
 }

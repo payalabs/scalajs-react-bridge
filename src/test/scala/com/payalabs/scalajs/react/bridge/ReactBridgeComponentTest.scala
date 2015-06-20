@@ -7,7 +7,7 @@ import org.scalatest.FunSuite
 import scala.scalajs.js
 
 class NameType (val name :String) extends AnyVal with ReactBridgeObject {
-  override def toJS  = name
+  override def toJs  = name
 }
 
 class ReactBridgeComponentTest extends FunSuite {
@@ -58,17 +58,17 @@ class ReactBridgeComponentTest extends FunSuite {
 
   test("non value class object properties") {
     case class Person(name: String, age: Int) extends ReactBridgeObject {
-      override def toJS: js.Any = js.Dynamic.literal(name = name, age = 10)
+      override def toJs: js.Any = js.Dynamic.literal(name = name, age = 10)
     }
 
     case class TestComponent(id: js.UndefOr[String] = js.undefined, className: js.UndefOr[String] = js.undefined,
                              ref: js.UndefOr[String] = js.undefined, key: js.UndefOr[Any] = js.undefined,
                              props: js.UndefOr[Person] = js.undefined) extends ReactBridgeComponent
 
-    val testComponent: ReactElement = TestComponent(props = Person("krishna", 10))()
+    val testComponent: ReactElement = TestComponent(props = Person("Krishna", 10))()
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode().querySelector("#props").textContent === "{name->krishna,age->10}")
+    assert(mounted.getDOMNode().querySelector("#props").textContent === "{name->Krishna,age->10}")
   }
 
   test("function properties") {
