@@ -120,6 +120,14 @@ object ReactBridgeComponent {
   }
 
   private def toAny: PartialFunction[Any, js.Any] = {
+    case obj: ReactBridgeObject => obj.toJS
     case value => value.asInstanceOf[js.Any]
   }
+}
+
+/**
+ *  extends this, to convert scala classes to js literals
+ */
+trait ReactBridgeObject extends Any {
+  def toJS : js.Any
 }

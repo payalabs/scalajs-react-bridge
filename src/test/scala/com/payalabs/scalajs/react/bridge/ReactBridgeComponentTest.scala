@@ -6,6 +6,10 @@ import org.scalatest.FunSuite
 
 import scala.scalajs.js
 
+class NameType (val name :String) extends AnyVal with ReactBridgeObject {
+  override def toJS  = name
+}
+
 class ReactBridgeComponentTest extends FunSuite {
 
   test("scalar properties") {
@@ -39,12 +43,22 @@ class ReactBridgeComponentTest extends FunSuite {
                              props: js.UndefOr[Map[String, Any]] = js.undefined) extends ReactBridgeComponent
 
     val testComponent: ReactElement = TestComponent(props = Map("one" -> 1, "two" -> "2", "foo" -> "bar"))()
-    println(React.renderToStaticMarkup(testComponent))
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
     assert(mounted.getDOMNode().querySelector("#props").textContent === "{one->1,two->2,foo->bar}")
   }
 
+  test("object properties") {
+    case class TestComponent(id: js.UndefOr[String] = js.undefined, className: js.UndefOr[String] = js.undefined,
+                             ref: js.UndefOr[String] = js.undefined, key: js.UndefOr[Any] = js.undefined,
+                             props: js.UndefOr[NameType] = js.undefined) extends ReactBridgeComponent
+
+    val testComponent: ReactElement = TestComponent(props = new NameType("dude"))()
+    println(React.renderToStaticMarkup(testComponent))
+
+    val mounted = ReactTestUtils.renderIntoDocument(testComponent)
+    assert(mounted.getDOMNode().querySelector("#props").textContent === "dude")
+  }
 
   test("function properties") {
     case class TestComponent(id: js.UndefOr[String] = js.undefined, className: js.UndefOr[String] = js.undefined,
