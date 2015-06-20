@@ -120,6 +120,17 @@ object ReactBridgeComponent {
   }
 
   private def toAny: PartialFunction[Any, js.Any] = {
+    case obj: ReactBridgeObject => obj.toJs
     case value => value.asInstanceOf[js.Any]
   }
+}
+
+/**
+ * Trait to allow customizing conversion from Scala objects to js values.
+ *
+ * Typically, you will need this to enforce stronger types on Scala side,
+ * while still meeting expectations of the underlying component.
+ */
+trait ReactBridgeObject extends Any {
+  def toJs : js.Any
 }

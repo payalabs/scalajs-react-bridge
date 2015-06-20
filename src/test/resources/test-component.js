@@ -67,7 +67,6 @@ TestComponent.eventTestData = [];
 
 TestComponent.testFunction = function(key, f) {
     return function(e) {
-        console.log(TestComponent.eventTestData + " " + f)
         f.apply(this, TestComponent.eventTestData)
     }
 }
