@@ -11,7 +11,6 @@ class NameType (val name :String) extends AnyVal with ReactBridgeObject {
 }
 
 class ReactBridgeComponentTest extends FunSuite {
-
   test("scalar properties") {
     case class TestComponent(id: js.UndefOr[String] = js.undefined, className: js.UndefOr[String] = js.undefined,
                              ref: js.UndefOr[String] = js.undefined, key: js.UndefOr[Any] = js.undefined,
@@ -58,17 +57,18 @@ class ReactBridgeComponentTest extends FunSuite {
   }
 
   test("non value class object properties") {
-    case class Person(name : String ,email : String) extends ReactBridgeObject {
-      override def toJS: js.Any = js.Dynamic.literal(name = name,email = email)
+    case class Person(name: String, age: Int) extends ReactBridgeObject {
+      override def toJS: js.Any = js.Dynamic.literal(name = name, age = 10)
     }
+
     case class TestComponent(id: js.UndefOr[String] = js.undefined, className: js.UndefOr[String] = js.undefined,
                              ref: js.UndefOr[String] = js.undefined, key: js.UndefOr[Any] = js.undefined,
                              props: js.UndefOr[Person] = js.undefined) extends ReactBridgeComponent
 
-    val testComponent: ReactElement = TestComponent(props = Person("krishna","krishna@everywhere.com"))()
+    val testComponent: ReactElement = TestComponent(props = Person("krishna", 10))()
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode().querySelector("#props").textContent === "{name->krishna,email->krishna@everywhere.com}")
+    assert(mounted.getDOMNode().querySelector("#props").textContent === "{name->krishna,age->10}")
   }
 
   test("function properties") {

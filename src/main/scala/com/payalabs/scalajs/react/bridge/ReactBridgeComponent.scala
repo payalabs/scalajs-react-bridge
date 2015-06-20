@@ -126,7 +126,10 @@ object ReactBridgeComponent {
 }
 
 /**
- *  extends this, to convert scala classes to js literals
+ * Trait to allow customizing conversion from Scala objects to js values.
+ *
+ * Typically, you will need this to enforce stronger types on Scala side,
+ * while still meeting expectations of the underlying component.
  */
 trait ReactBridgeObject extends Any {
   def toJS : js.Any
