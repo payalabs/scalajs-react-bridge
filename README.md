@@ -36,7 +36,7 @@ $ sbt publish
 
 3. Add the following dependency to your scalajs-react project
  ```scala
-libraryDependencies += "com.payalabs" %%% "scalajs-react-bridge" % "0.1.0"
+libraryDependencies += "com.payalabs" %%% "scalajs-react-bridge" % "0.1.1-SNAPSHOT"
 ```
 
 ## Defining components
@@ -45,7 +45,7 @@ This core class `ReactBridgeComponent` assumes that the classes extending it fol
 - The class name must correspond to the function name exposed for the underlying component.
 - Each case class parameter name must correspond to the property name of the underlying component.
 - Each case class parameter type must map to the underlying component's expected property
-  type. For example, if the underlying component expects a string property, then the parameter type must be `String`. The bridge automatically translates parameters with `Seq` type (or its subtypes) to js array and `Map` types to js literal (currently makes an unchecked assumption that the key is of the String type).
+  type. For example, if the underlying component expects a string property, then the parameter type must be `String`. The bridge automatically translates (through implicit converters) parameters with `Seq` type (or its subtypes) to js array and `Map` types with `String` key type to js literal. You may provide custom conversions for your own types by introducing an implcit value of the the [JsWriter](https://github.com/payalabs/scalajs-react-bridge/blob/master/src/main/scala/com/payalabs/scalajs/react/bridge/ReactBridgeComponent.scala) type.
 
 ## Example components
 

@@ -27,3 +27,32 @@ libraryDependencies ++= {
 
 jsDependencies += "org.webjars" % "react" % "0.13.3" % Test / "react-with-addons.js" minified "react-with-addons.min.js" commonJSName "React"
 jsDependencies in Test += ProvidedJS / "test-component.js" dependsOn "react-with-addons.js"
+
+sourceGenerators in Compile <+= sourceManaged in Compile map { dir =>
+  val file = dir / "com" / "payalabs" / "scalajs" / "react" / "bridge" / "GeneratedImplicits.scala"
+
+  val f0_22 = (0 to 22).map { arity =>
+    val argsParam = (1 to arity).map(i => s"T$i").mkString(",")
+    val params = if (argsParam.isEmpty) "R" else s"$argsParam,R"
+    s"""
+      |implicit def function${arity}Writer[$params]: JsWriter[Function$arity[$params]] = {
+      |  new JsWriter[Function$arity[$params]] {
+      |    override def toJs(value: Function$arity[$params]): js.Any = fromFunction$arity(value)
+      |  }
+      |}""".stripMargin
+  }.mkString("\n")
+
+  IO.write(file, s"""
+    |package com.payalabs.scalajs.react.bridge
+    |
+    |import scala.scalajs.js
+    |import scala.scalajs.js.Any._
+    |
+    |trait GeneratedImplicits {
+    |  $f0_22
+    |}
+    """.stripMargin
+  )
+
+  Seq(file)
+}
