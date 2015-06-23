@@ -28,11 +28,8 @@ package object bridge extends GeneratedImplicits with LowPriorityImplicits {
 
     new JsWriter[Map[String, T]] {
       def toJs(value: Map[String, T]): js.Any = {
-        val literal = js.Dynamic.literal()
-        value.foreach { case (k, v) =>
-          literal.updateDynamic(k)(elementWriter.toJs(v))
-        }
-        literal
+        val converted = value.map { case (k,v) => (k, elementWriter.toJs(v)) }
+        js.Dictionary(converted.toSeq: _*)
       }
     }
   }
