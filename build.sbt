@@ -3,9 +3,9 @@ enablePlugins(ScalaJSPlugin)
 organization := "com.payalabs"
 name := "scalajs-react-bridge"
 
-version := "0.1.1-SNAPSHOT"
+version := "0.2.0-SNAPSHOT"
 
-scalaVersion := "2.11.6"
+scalaVersion := "2.11.7"
 
 jsDependencies += RuntimeDOM
 
@@ -13,9 +13,9 @@ preLinkJSEnv := PhantomJSEnv().value
 postLinkJSEnv := PhantomJSEnv().value
 
 libraryDependencies ++= {
-  val scalaJsDomV = "0.8.1"
-  val scalaJsReactV = "0.9.0"
-  val scalatestV = "3.0.0-M1"
+  val scalaJsDomV = "0.8.2"
+  val scalaJsReactV = "0.10.0"
+  val scalatestV = "3.0.0-M10"
   Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value % Provided,
     "org.scala-js" %%% "scalajs-dom" % scalaJsDomV % Provided,
@@ -25,7 +25,8 @@ libraryDependencies ++= {
   )
 }
 
-jsDependencies += "org.webjars" % "react" % "0.13.3" % Test / "react-with-addons.js" minified "react-with-addons.min.js" commonJSName "React"
+jsDependencies += "org.webjars.npm" % "react" % "0.14.0" % Test / "react-with-addons.js" minified "react-with-addons.min.js" commonJSName "React"
+jsDependencies += "org.webjars.npm" % "react-dom" % "0.14.0" % Test / "react-dom.js" minified "react-dom.min.js" commonJSName "ReactDOM"
 jsDependencies in Test += ProvidedJS / "test-component.js" dependsOn "react-with-addons.js"
 
 sourceGenerators in Compile <+= sourceManaged in Compile map { dir =>

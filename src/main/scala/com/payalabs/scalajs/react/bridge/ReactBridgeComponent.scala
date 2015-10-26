@@ -33,8 +33,8 @@ abstract class ReactBridgeComponent {
     val componentFunction = componentPrefixes.foldLeft(global) {
       _.selectDynamic(_)
     }.selectDynamic(componentName)
-    val factory = React.createFactory(componentFunction.asInstanceOf[ReactComponentType[Any, Any, Any, TopNode]])
-    factory(props.asInstanceOf[WrapObj[Any]], children.asInstanceOf[Seq[ReactNode]])
+    val factory = React.createFactory(componentFunction.asInstanceOf[ReactClass[Any, Any, Any, TopNode]])
+    factory(props.asInstanceOf[WrapObj[Any]], children.asInstanceOf[Seq[ReactNode]]:_*)
   }
 }
 
