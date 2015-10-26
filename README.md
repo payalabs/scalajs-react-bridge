@@ -28,15 +28,14 @@ div(
 
 ## Getting started
 
-1. Clone this repository
-2. Publish to local sbt repository
- ```
-$ sbt publish
+1. Add the Sonatype snapshots resolver to your SBT configuration:
+ ```scala
+resolvers += Resolver.sonatypeRepo("snapshots")
 ```
 
-3. Add the following dependency to your scalajs-react project
+2. Add the following dependency to your scalajs-react project:
  ```scala
-libraryDependencies += "com.payalabs" %%% "scalajs-react-bridge" % "0.1.1-SNAPSHOT"
+libraryDependencies += "com.payalabs" %%% "scalajs-react-bridge" % "0.2.0-SNAPSHOT"
 ```
 
 ## Defining components
