@@ -57,3 +57,24 @@ sourceGenerators in Compile <+= sourceManaged in Compile map { dir =>
 
   Seq(file)
 }
+
+pomExtra in Global := {
+  <url>https://github.com/payalabs/scalajs-react-bridge</url>
+  <licenses>
+    <license>
+      <name>The MIT License (MIT)</name>
+      <url>https://opensource.org/licenses/MIT</url>
+    </license>
+  </licenses>
+  <scm>
+    <connection>scm:git:github.com/payalabs/scalajs-react-bridge</connection>
+    <developerConnection>scm:git:git@github.com:payalabs/scalajs-react-bridge</developerConnection>
+    <url>github.com/payalabs/scalajs-react-bridge</url>
+  </scm>
+  <developers>
+    <developer>
+      <id>ramnivas</id>
+      <name>Ramnivas Laddad</name>
+    </developer>
+  </developers>
+}
