@@ -106,18 +106,18 @@ class ReactBridgeComponentTest extends FunSuite {
     var something2 = false
     var something3 = false
 
-    def change1(i: Int):Unit = {
+    def change1(i: Int): Unit = {
       something1 = true
       assert(i === 1)
     }
 
-    def change2(i: Int, s: String):Unit = {
+    def change2(i: Int, s: String): Unit = {
       something2 = true
       assert(i === 1)
       assert(s === "two")
     }
 
-    def change3(i: Int, s: String, a: js.Array[Any]):Unit = {
+    def change3(i: Int, s: String, a: js.Array[Any]): Unit = {
       something3 = true
       assert(i === 1)
       assert(s === "two")
