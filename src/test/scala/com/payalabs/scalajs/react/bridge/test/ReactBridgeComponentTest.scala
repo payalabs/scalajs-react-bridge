@@ -23,7 +23,6 @@ object Person {
   }
 }
 
-
 class ReactBridgeComponentTest extends FunSuite {
   test("scalar properties") {
     case class TestComponent(id: js.UndefOr[String] = js.undefined, className: js.UndefOr[String] = js.undefined,
@@ -140,6 +139,52 @@ class ReactBridgeComponentTest extends FunSuite {
     ReactTestUtils.Simulate.click(mounted.getDOMNode().querySelector("#onSomething3"))
     assert(something3 === true)
   }
+
+  test("function properties that return Callback") {
+    case class TestComponent(id: js.UndefOr[String] = js.undefined, className: js.UndefOr[String] = js.undefined,
+                             ref: js.UndefOr[String] = js.undefined, key: js.UndefOr[Any] = js.undefined,
+                             onSomething1: js.UndefOr[Int => Callback] = js.undefined,
+                             onSomething2: js.UndefOr[(Int, String) => Callback] = js.undefined,
+                             onSomething3: js.UndefOr[(Int, String, js.Array[Any]) => Callback] = js.undefined) extends ReactBridgeComponent
+    var something1 = false
+    var something2 = false
+    var something3 = false
+
+    def change1(i: Int): Callback = Callback {
+      something1 = true
+      assert(i === 1)
+    }
+
+    def change2(i: Int, s: String): Callback = Callback {
+      something2 = true
+      assert(i === 1)
+      assert(s === "two")
+    }
+
+    def change3(i: Int, s: String, a: js.Array[Any]): Callback = Callback {
+      something3 = true
+      assert(i === 1)
+      assert(s === "two")
+      assert(a.toArray === Array(3, "four"))
+    }
+
+    val testComponent: ReactElement = TestComponent(onSomething1 = change1 _, onSomething2 = change2 _, onSomething3 = change3 _)()
+
+    val mounted = ReactTestUtils.renderIntoDocument(testComponent)
+
+    js.Dynamic.global.TestComponent.eventTestData = js.Array(1)
+    ReactTestUtils.Simulate.click(mounted.getDOMNode().querySelector("#onSomething1"))
+    assert(something1 === true)
+
+    js.Dynamic.global.TestComponent.eventTestData = js.Array(1, "two")
+    ReactTestUtils.Simulate.click(mounted.getDOMNode().querySelector("#onSomething2"))
+    assert(something2 === true)
+
+    js.Dynamic.global.TestComponent.eventTestData = js.Array(1, "two", js.Array[Any](3, "four"))
+    ReactTestUtils.Simulate.click(mounted.getDOMNode().querySelector("#onSomething3"))
+    assert(something3 === true)
+  }
+
 
   test("properties without js.UndefOr container") {
     case class TestComponent(id: js.UndefOr[String] = js.undefined, className: js.UndefOr[String] = js.undefined,

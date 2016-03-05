@@ -32,21 +32,31 @@ sourceGenerators in Compile <+= sourceManaged in Compile map { dir =>
   val file = dir / "com" / "payalabs" / "scalajs" / "react" / "bridge" / "GeneratedImplicits.scala"
 
   val f0_22 = (0 to 22).map { arity =>
-    val argsParam = (1 to arity).map(i => s"T$i").mkString(",")
-    val params = if (argsParam.isEmpty) "R" else s"$argsParam,R"
+    val argsParams = (1 to arity).map(i => s"T$i").mkString(",")
+    val params = if (argsParams.isEmpty) "R" else s"$argsParams,R"
+    val callbackParams = if (argsParams.isEmpty) "CallbackTo[R]" else s"$argsParams,CallbackTo[R]"
+    val valueParams = (1 to arity).map(i => s"_:T$i").mkString(",")
     s"""
       |implicit def function${arity}Writer[$params]: JsWriter[Function$arity[$params]] = {
       |  new JsWriter[Function$arity[$params]] {
       |    override def toJs(value: Function$arity[$params]): js.Any = fromFunction$arity(value)
       |  }
+      |}
+      |
+      |implicit def function${arity}CallbackWriter[$params]: JsWriter[Function$arity[$callbackParams]] = {
+      |  new JsWriter[Function$arity[$callbackParams]] {
+      |    override def toJs(value: Function$arity[$callbackParams]): js.Any = fromFunction$arity(value($valueParams).runNow)
+      |  }
       |}""".stripMargin
   }.mkString("\n")
+
 
   IO.write(file, s"""
     |package com.payalabs.scalajs.react.bridge
     |
     |import scala.scalajs.js
     |import scala.scalajs.js.Any._
+    |import japgolly.scalajs.react.CallbackTo
     |
     |trait GeneratedImplicits {
     |  $f0_22
