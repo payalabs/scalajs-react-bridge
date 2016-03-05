@@ -1,7 +1,7 @@
 package com.payalabs.scalajs.react.bridge.test
 
 import com.payalabs.scalajs.react.bridge.{ReactBridgeComponent, JsWriter}
-import japgolly.scalajs.react.ReactElement
+import japgolly.scalajs.react._
 import japgolly.scalajs.react.test.ReactTestUtils
 import org.scalatest.FunSuite
 
@@ -139,5 +139,16 @@ class ReactBridgeComponentTest extends FunSuite {
     js.Dynamic.global.TestComponent.eventTestData = js.Array(1, "two", js.Array[Any](3, "four"))
     ReactTestUtils.Simulate.click(mounted.getDOMNode().querySelector("#onSomething3"))
     assert(something3 === true)
+  }
+
+  test("properties without js.UndefOr container") {
+    case class TestComponent(id: js.UndefOr[String] = js.undefined, className: js.UndefOr[String] = js.undefined,
+                             ref: js.UndefOr[String] = js.undefined, key: js.UndefOr[Any] = js.undefined,
+                             name: String, age: Int) extends ReactBridgeComponent
+    val testComponent: ReactElement = TestComponent(name = "foo", age = 25)()
+
+    val mounted = ReactTestUtils.renderIntoDocument(testComponent)
+    assert(mounted.getDOMNode().querySelector("#name").textContent === "foo")
+    assert(mounted.getDOMNode().querySelector("#age").textContent === "25")
   }
 }

@@ -69,9 +69,18 @@ object ReactBridgeComponent {
 
     tpe.decls.collect {
       case param if param.isMethod && param.asMethod.isCaseAccessor =>
-        val paramType = param.asMethod.returnType.asInstanceOf[TypeRefApi].args.head
-        val converter = q"implicitly[JsWriter[$paramType]]"
-        val converted = q"${c.prefix.tree}.value.${param.name.toTermName}.map(v => $converter.toJs(v))"
+        val rawParamType = param.asMethod.returnType
+        val converted = {
+          if (rawParamType.typeConstructor == typeOf[scala.scalajs.js.UndefOr[Any]].typeConstructor) {
+            val paramType = rawParamType.typeArgs.head
+            val converter = q"implicitly[JsWriter[$paramType]]"
+            q"${c.prefix.tree}.value.${param.name.toTermName}.map(v => $converter.toJs(v))"
+          } else {
+            val paramType = rawParamType
+            val converter = q"implicitly[JsWriter[$paramType]]"
+            q"$converter.toJs(${c.prefix.tree}.value.${param.name.toTermName})"
+          }
+        }
         (param.name.toString, converted)
     }.toList
   }

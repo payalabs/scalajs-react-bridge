@@ -3,14 +3,13 @@ enablePlugins(ScalaJSPlugin)
 organization := "com.payalabs"
 name := "scalajs-react-bridge"
 
-version := "0.2.0-SNAPSHOT"
+version := "0.3.0-SNAPSHOT"
 
 scalaVersion := "2.11.7"
 
 jsDependencies += RuntimeDOM
 
-preLinkJSEnv := PhantomJSEnv().value
-postLinkJSEnv := PhantomJSEnv().value
+jsEnv := PhantomJSEnv().value
 
 libraryDependencies ++= {
   val scalaJsDomV = "0.8.2"
