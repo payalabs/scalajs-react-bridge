@@ -59,7 +59,11 @@ object ReactBridgeComponent {
       ts => ts.annotations.filter(_.tree.tpe == typeOf[ComponentNamespace])
     }.headOption.map(a => a.tree.children.tail.head.toString.tail.init.split('.')).getOrElse(Array[String]())
 
-    val componentTree = q"""${c.prefix.tree}.value.component($componentNamespace, $typeShortName, $params, ..$children)"""
+    val componentTree =
+      q"""
+         import com.payalabs.scalajs.react.bridge.JsWriter
+         ${c.prefix.tree}.value.component($componentNamespace, $typeShortName, $params, ..$children)
+      """
 
     c.Expr[ReactElement](componentTree)
   }
