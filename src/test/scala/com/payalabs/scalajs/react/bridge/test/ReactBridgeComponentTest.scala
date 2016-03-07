@@ -40,12 +40,13 @@ class ReactBridgeComponentTest extends FunSuite {
   test("array properties") {
     case class TestComponent(id: js.UndefOr[String] = js.undefined, className: js.UndefOr[String] = js.undefined,
                              ref: js.UndefOr[String] = js.undefined, key: js.UndefOr[Any] = js.undefined,
-                             names: js.UndefOr[Seq[String]] = js.undefined) extends ReactBridgeComponent
+                             names: js.UndefOr[Seq[String]], ages: js.UndefOr[scala.collection.immutable.Seq[Int]]) extends ReactBridgeComponent
 
-    val testComponent: ReactElement = TestComponent(names = Seq("foo", "bar"))()
+    val testComponent: ReactElement = TestComponent(names = Seq("foo", "bar"), ages = scala.collection.immutable.Seq(5,10))()
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
     assert(mounted.getDOMNode().querySelector("#names").textContent === "[foo,bar]")
+    assert(mounted.getDOMNode().querySelector("#ages").textContent === "[5,10]")
   }
 
 

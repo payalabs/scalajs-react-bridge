@@ -23,6 +23,16 @@ package object bridge extends GeneratedImplicits with LowPriorityImplicits {
     }
   }
 
+  implicit def immutableSeqWriter[T : JsWriter]: JsWriter[scala.collection.immutable.Seq[T]] = {
+    val elementWriter = implicitly[JsWriter[T]]
+
+    new JsWriter[scala.collection.immutable.Seq[T]] {
+      def toJs(value: scala.collection.immutable.Seq[T]): js.Any = {
+        js.Array(value.map(e => elementWriter.toJs(e)): _*)
+      }
+    }
+  }
+
   implicit def mapWriter[T : JsWriter]: JsWriter[Map[String, T]] = {
     val elementWriter = implicitly[JsWriter[T]]
 
