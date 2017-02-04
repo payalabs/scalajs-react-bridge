@@ -5,16 +5,16 @@ name := "scalajs-react-bridge"
 
 version := "0.3.0-SNAPSHOT"
 
-scalaVersion := "2.11.7"
+scalaVersion := "2.12.1"
 
 jsDependencies += RuntimeDOM
 
 jsEnv := PhantomJSEnv().value
 
 libraryDependencies ++= {
-  val scalaJsDomV = "0.8.2"
-  val scalaJsReactV = "0.10.0"
-  val scalatestV = "3.0.0-M10"
+  val scalaJsDomV = "0.9.1"
+  val scalaJsReactV = "0.11.3"
+  val scalatestV = "3.0.1"
   Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value % Provided,
     "org.scala-js" %%% "scalajs-dom" % scalaJsDomV % Provided,
