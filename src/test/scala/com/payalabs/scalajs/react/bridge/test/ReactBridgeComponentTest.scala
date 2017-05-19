@@ -146,10 +146,12 @@ class ReactBridgeComponentTest extends FunSuite {
                              ref: js.UndefOr[String] = js.undefined, key: js.UndefOr[Any] = js.undefined,
                              onSomething1: js.UndefOr[Int => Callback] = js.undefined,
                              onSomething2: js.UndefOr[(Int, String) => Callback] = js.undefined,
-                             onSomething3: js.UndefOr[(Int, String, js.Array[Any]) => Callback] = js.undefined) extends ReactBridgeComponent
+                             onSomething3: js.UndefOr[(Int, String, js.Array[Any]) => Callback] = js.undefined,
+                             onSomething4: js.UndefOr[Callback] = js.undefined) extends ReactBridgeComponent
     var something1 = false
     var something2 = false
     var something3 = false
+    var something4 = false
 
     def change1(i: Int): Callback = Callback {
       something1 = true
@@ -169,7 +171,11 @@ class ReactBridgeComponentTest extends FunSuite {
       assert(a.toArray === Array(3, "four"))
     }
 
-    val testComponent: ReactElement = TestComponent(onSomething1 = change1 _, onSomething2 = change2 _, onSomething3 = change3 _)()
+    def change4: Callback = Callback {
+      something4 = true
+    }
+
+    val testComponent: ReactElement = TestComponent(onSomething1 = change1 _, onSomething2 = change2 _, onSomething3 = change3 _, onSomething4 = change4)()
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
 
@@ -184,6 +190,9 @@ class ReactBridgeComponentTest extends FunSuite {
     js.Dynamic.global.TestComponent.eventTestData = js.Array(1, "two", js.Array[Any](3, "four"))
     ReactTestUtils.Simulate.click(mounted.getDOMNode().querySelector("#onSomething3"))
     assert(something3 === true)
+
+    ReactTestUtils.Simulate.click(mounted.getDOMNode().querySelector("#onSomething4"))
+    assert(something4 === true)
   }
 
 

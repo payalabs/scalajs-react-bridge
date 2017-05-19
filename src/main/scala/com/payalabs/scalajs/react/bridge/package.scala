@@ -1,6 +1,7 @@
 package com.payalabs.scalajs.react
 
 import com.payalabs.scalajs.react.bridge.JsWriter
+import japgolly.scalajs.react.CallbackTo
 
 import scala.scalajs.js
 
@@ -13,6 +14,10 @@ trait LowPriorityImplicits {
 }
 
 package object bridge extends GeneratedImplicits with LowPriorityImplicits {
+  implicit def callbackWriter[T]: JsWriter[CallbackTo[T]] = new JsWriter[CallbackTo[T]] {
+    override def toJs(value: CallbackTo[T]): js.Any = value.toJsFn
+  }
+
   implicit def seqWriter[T : JsWriter]: JsWriter[Seq[T]] = {
     val elementWriter = implicitly[JsWriter[T]]
 
