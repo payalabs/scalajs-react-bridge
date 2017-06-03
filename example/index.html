@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>scalajs-react-bridge Example application</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+    </head>
+
+    <body onload="com.payalabs.scalajs.react.bridge.showcase.ShowcaseApp().main()">
+        <div id="app-container"></div>
+        <!-- externals to be replaced by webpack StringReplacePlugin -->
+        <script type="text/javascript" src="./bundle.js"></script>
+    </body>
+</html>
