@@ -2,7 +2,7 @@ package com.payalabs.scalajs.react.bridge
 
 import japgolly.scalajs.react.vdom.{TagMod, VdomElement}
 
-abstract class ReactBridgeComponentNoPropsNoChildren extends ReactBridgeComponent {
+abstract class ReactBridgeComponentNoSpecialPropsNoChildren extends ReactBridgeComponent {
   def apply(attrAndChildren: TagMod*): VdomElement = {
     val (props, children) = extractPropsAndChildren(attrAndChildren)
 

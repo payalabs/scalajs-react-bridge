@@ -14,5 +14,5 @@ object Button extends ReactBootstrapComponent {
             block: js.UndefOr[Boolean] = js.undefined,
             disabled: js.UndefOr[Boolean] = js.undefined,
             href: js.UndefOr[String] = js.undefined,
-            onClick: js.UndefOr[() => Unit] = js.undefined): WithProps = autoConstruct
+            onClick: js.UndefOr[() => Unit] = js.undefined): WithProps = auto
 }

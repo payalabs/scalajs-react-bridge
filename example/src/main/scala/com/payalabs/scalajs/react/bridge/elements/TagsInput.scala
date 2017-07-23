@@ -14,5 +14,5 @@ object TagsInput extends ReactBridgeComponent {
             placeholder: js.UndefOr[String] = js.undefined,
             onChange: js.UndefOr[js.Array[String] => Callback] = js.undefined,
             validate: js.UndefOr[String => CallbackTo[Boolean]] = js.undefined,
-            transform: js.UndefOr[String => CallbackTo[String]] = js.undefined): WithPropsNoChildren = autoConstructNoChildren
+            transform: js.UndefOr[String => CallbackTo[String]] = js.undefined): WithPropsNoChildren = autoNoChildren
 }

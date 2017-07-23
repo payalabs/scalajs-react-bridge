@@ -27,5 +27,5 @@ object FormControl extends ReactBootstrapComponent {
             multiple: js.UndefOr[Boolean] = js.undefined,
             readOnly: js.UndefOr[Boolean] = js.undefined,
             checked: js.UndefOr[Boolean] = js.undefined,
-            disabled: js.UndefOr[Boolean] = js.undefined): WithPropsNoChildren = autoConstructNoChildren
+            disabled: js.UndefOr[Boolean] = js.undefined): WithPropsNoChildren = autoNoChildren
 }

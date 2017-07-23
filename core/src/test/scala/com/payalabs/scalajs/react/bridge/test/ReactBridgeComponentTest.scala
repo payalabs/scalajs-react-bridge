@@ -1,6 +1,6 @@
 package com.payalabs.scalajs.react.bridge.test
 
-import com.payalabs.scalajs.react.bridge.{JsWriter, ReactBridgeComponent, ReactBridgeComponentNoProps, ReactBridgeComponentNoPropsNoChildren, WithPropsNoChildren}
+import com.payalabs.scalajs.react.bridge.{JsWriter, ReactBridgeComponent, ReactBridgeComponentNoSpecialProps, ReactBridgeComponentNoSpecialPropsNoChildren, WithPropsAndTagModsAndChildren, WithPropsAndTagsMods, WithPropsNoChildren}
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.all._
 import japgolly.scalajs.react.test.ReactTestUtils
@@ -28,14 +28,14 @@ object Person {
 }
 
 object TestComponent extends ReactBridgeComponent {
-  def apply(name: js.UndefOr[String] = js.undefined, age: js.UndefOr[Int] = js.undefined): WithPropsNoChildren = this.autoConstructNoChildren
+  def apply(name: js.UndefOr[String] = js.undefined, age: js.UndefOr[Int] = js.undefined): WithPropsNoChildren = this.autoNoChildren
 }
 
 class ReactBridgeComponentTest extends FunSuite {
 
-  test("scalar properties without dom properties") {
+  test("scalar properties omitted dom attr") {
     object TestComponent extends ReactBridgeComponent {
-      def apply(name: js.UndefOr[String] = js.undefined, age: js.UndefOr[Int] = js.undefined): WithPropsNoChildren = this.autoConstructNoChildren
+      def apply(name: js.UndefOr[String] = js.undefined, age: js.UndefOr[Int] = js.undefined): WithPropsNoChildren = this.autoNoChildren
     }
 
     val testComponent = TestComponent(name = "foo", age = 25) // the implicit conversion from WithPropsNoChildren kicks in to allow skipping dom props
@@ -45,9 +45,38 @@ class ReactBridgeComponentTest extends FunSuite {
     assert(mounted.getDOMNode.querySelector("#age").getAttribute("data-test") === "25")
   }
 
+  test("scalar properties without a possibility to specify dom attr") {
+    object TestComponent extends ReactBridgeComponent {
+
+      def apply(name: js.UndefOr[String] = js.undefined, age: js.UndefOr[Int] = js.undefined): VdomElement = this.autoNoTagModsNoChildren
+    }
+
+    val testComponent = TestComponent(name = "foo", age = 25)
+
+    val mounted = ReactTestUtils.renderIntoDocument(testComponent)
+    assert(mounted.getDOMNode.querySelector("#name").getAttribute("data-test") === "foo")
+    assert(mounted.getDOMNode.querySelector("#age").getAttribute("data-test") === "25")
+  }
+
+  test("scalar properties without a possibility to specify dom attr but with children") {
+    object TestComponent extends ReactBridgeComponent {
+      def apply(name: js.UndefOr[String] = js.undefined, age: js.UndefOr[Int] = js.undefined): WithPropsAndTagsMods = this.autoNoTagMods
+    }
+
+    val testComponent = TestComponent(name = "foo", age = 25)(
+      "textChild", span("spanChild")
+    )
+
+    val mounted = ReactTestUtils.renderIntoDocument(testComponent)
+    assert(mounted.getDOMNode.querySelector("#name").getAttribute("data-test") === "foo")
+    assert(mounted.getDOMNode.querySelector("#age").getAttribute("data-test") === "25")
+    assertChildren(mounted)
+  }
+
+
   test("scalar properties and dom properties") {
     object TestComponent extends ReactBridgeComponent {
-      def apply(name: js.UndefOr[String] = js.undefined, age: js.UndefOr[Int] = js.undefined): WithPropsNoChildren = this.autoConstructNoChildren
+      def apply(name: js.UndefOr[String] = js.undefined, age: js.UndefOr[Int] = js.undefined): WithPropsNoChildren = this.autoNoChildren
     }
 
     val testComponent = TestComponent(name = "foo", age = 25)(id := "test-id", className := "test-classname")
@@ -60,7 +89,7 @@ class ReactBridgeComponentTest extends FunSuite {
   }
 
   test("no special properties") {
-    object TestComponent extends ReactBridgeComponentNoProps
+    object TestComponent extends ReactBridgeComponentNoSpecialProps
 
     val testComponent = TestComponent(id := "test-id", className := "test-classname")(
       "textChild",
@@ -75,7 +104,7 @@ class ReactBridgeComponentTest extends FunSuite {
   }
 
   test("no special properties no children") {
-    object TestComponent extends ReactBridgeComponentNoPropsNoChildren
+    object TestComponent extends ReactBridgeComponentNoSpecialPropsNoChildren
 
     val testComponent = TestComponent(id := "test-id", className := "test-classname")
 
@@ -99,7 +128,7 @@ class ReactBridgeComponentTest extends FunSuite {
 
   test("array properties") {
     object TestComponent extends ReactBridgeComponent {
-      def apply(names: js.UndefOr[Seq[String]], ages: js.UndefOr[scala.collection.immutable.Seq[Int]]): WithPropsNoChildren = this.autoConstructNoChildren
+      def apply(names: js.UndefOr[Seq[String]], ages: js.UndefOr[scala.collection.immutable.Seq[Int]]): WithPropsNoChildren = this.autoNoChildren
     }
 
     val testComponent = TestComponent(names = Seq("foo", "bar"), ages = scala.collection.immutable.Seq(5,10))()
@@ -112,7 +141,7 @@ class ReactBridgeComponentTest extends FunSuite {
 
   test("map properties") {
     object TestComponent extends ReactBridgeComponent {
-      def apply(map: js.UndefOr[Map[String, Any]] = js.undefined): WithPropsNoChildren = this.autoConstructNoChildren
+      def apply(map: js.UndefOr[Map[String, Any]] = js.undefined): WithPropsNoChildren = this.autoNoChildren
     }
 
     val testComponent = TestComponent(map = Map("one" -> 1, "two" -> "2", "foo" -> "bar"))()
@@ -124,7 +153,7 @@ class ReactBridgeComponentTest extends FunSuite {
 
   test("value class object properties") {
     object TestComponent extends ReactBridgeComponent {
-      def apply(name: js.UndefOr[NameType] = js.undefined): WithPropsNoChildren = this.autoConstructNoChildren
+      def apply(name: js.UndefOr[NameType] = js.undefined): WithPropsNoChildren = this.autoNoChildren
     }
 
     val testComponent = TestComponent(name = new NameType("test-name"))
@@ -136,7 +165,7 @@ class ReactBridgeComponentTest extends FunSuite {
 
   test("non value class object properties") {
     object TestComponent extends ReactBridgeComponent {
-      def apply(map: js.UndefOr[Person] = js.undefined): WithPropsNoChildren = this.autoConstructNoChildren
+      def apply(map: js.UndefOr[Person] = js.undefined): WithPropsNoChildren = this.autoNoChildren
     }
 
     val testComponent = TestComponent(map = Person("test-person", 10))
@@ -147,7 +176,7 @@ class ReactBridgeComponentTest extends FunSuite {
 
   test("seq of object properties") {
     object TestComponent extends ReactBridgeComponent {
-      def apply(map: js.UndefOr[Seq[Person]] = js.undefined): WithPropsNoChildren = this.autoConstructNoChildren
+      def apply(map: js.UndefOr[Seq[Person]] = js.undefined): WithPropsNoChildren = this.autoNoChildren
     }
 
     val testComponent = TestComponent(map = Seq(Person("First", 10), Person("Second", 11)))
@@ -160,7 +189,7 @@ class ReactBridgeComponentTest extends FunSuite {
     object TestComponent extends ReactBridgeComponent {
       def apply(onSomething1: js.UndefOr[Int => Unit] = js.undefined,
                 onSomething2: js.UndefOr[(Int, String) => Unit] = js.undefined,
-                onSomething3: js.UndefOr[(Int, String, js.Array[Any]) => Unit] = js.undefined): WithPropsNoChildren = this.autoConstructNoChildren
+                onSomething3: js.UndefOr[(Int, String, js.Array[Any]) => Unit] = js.undefined): WithPropsNoChildren = this.autoNoChildren
     }
 
     var something1 = false
@@ -211,7 +240,7 @@ class ReactBridgeComponentTest extends FunSuite {
       def apply(onSomething1: js.UndefOr[Int => Callback] = js.undefined,
                 onSomething2: js.UndefOr[(Int, String) => Callback] = js.undefined,
                 onSomething3: js.UndefOr[(Int, String, js.Array[Any]) => Callback] = js.undefined,
-                onSomething4: js.UndefOr[Callback] = js.undefined): WithPropsNoChildren = this.autoConstructNoChildren
+                onSomething4: js.UndefOr[Callback] = js.undefined): WithPropsNoChildren = this.autoNoChildren
     }
 
     var something1 = false
@@ -264,7 +293,7 @@ class ReactBridgeComponentTest extends FunSuite {
 
   test("properties without js.UndefOr container") {
     object TestComponent extends ReactBridgeComponent {
-      def apply(name: String, age: Int): WithPropsNoChildren = this.autoConstructNoChildren
+      def apply(name: String, age: Int): WithPropsNoChildren = this.autoNoChildren
     }
 
     val testComponent = TestComponent(name = "foo", age = 25)()
@@ -275,7 +304,7 @@ class ReactBridgeComponentTest extends FunSuite {
   }
 
   test("supplied key") {
-    object TestComponent extends ReactBridgeComponentNoPropsNoChildren
+    object TestComponent extends ReactBridgeComponentNoSpecialPropsNoChildren
 
     // Indirectly test that passed key makes it to the underlying components
     // If the keys don't make it to the underlying component (or the keys aren't unique),
@@ -284,6 +313,7 @@ class ReactBridgeComponentTest extends FunSuite {
 
     ReactTestUtils.renderIntoDocument(div(testComponent))
   }
+
 
   // Assumes that the children are ("textChild", span("spanChild"))
   private def assertChildren(mounted: MountedOutput): Unit = {
