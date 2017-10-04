@@ -63,7 +63,7 @@ The core logic of bridging the JS React component to scala-react is implemented 
 | **Can take DOM attrs**    | `auto`            | `autoNoChildren`          |
 | **Cannot take DOM attrs** | `autoNoTagMods`   | `autoNoTagModsNoChildren` |
 
-Each of the macros return type that siggnify what has been already processed (and thus cannot process it again).
+Each of the macros return type that signify what has been already processed (and thus cannot process it again).
 - `auto`: `WithProps` (properties have been consumed, thus can pass `TagMod`s followed by children)
 - `autoNoChildren`: `WithPropsNoChildren` (properties have been consumed, thus can pass `TagMod`s, but that cannot be followed by children)
 - `autoNoTagMods`: `WithPropsAndTags` (properties have been consumed as are `TagMod`s, thus can be followed by children)
