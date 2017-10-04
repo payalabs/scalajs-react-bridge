@@ -1,6 +1,6 @@
 # scalajs-react bridge
 
-A boilerplate-free way to make React components in the wild usable in [scalajs-react](https://github.com/japgolly/scalajs-react) apps. Write an object for each component, use one of the two provided macros, and start using it in a type-safe manner in scalajs-react apps.
+A boilerplate-free way to make React components in the wild usable in [scalajs-react](https://github.com/japgolly/scalajs-react) apps. Write an object for each component, use one of the four provided macros, and start using it in a type-safe manner in scalajs-react apps.
 
 For example, to create a component corresponding to [react-tagsinput](https://github.com/olahol/react-tagsinput), define a class as follows:
 
