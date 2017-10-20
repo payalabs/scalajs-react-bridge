@@ -4,6 +4,8 @@ import japgolly.scalajs.react.vdom.{TagMod, VdomElement, VdomNode}
 
 import scala.scalajs.js
 
+import scala.language.implicitConversions
+
 class WithProps(jsComponent: JsComponentType, jsProps: js.Object) {
   def apply(attrAndChildren: TagMod*): WithPropsAndTagsMods = {
     val (props, children) = extractPropsAndChildren(attrAndChildren)
@@ -25,4 +27,8 @@ class WithProps(jsComponent: JsComponentType, jsProps: js.Object) {
     }
     result.asInstanceOf[js.Dynamic]
   }
+}
+
+object WithProps {
+  implicit def toVdomNode(wp: WithProps): VdomNode = wp.apply()
 }
