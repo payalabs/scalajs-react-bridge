@@ -96,23 +96,16 @@ object ReactBridgeComponent {
     * @return
     * @see JsWriter
     */
-  private def computeParams(c: Context): c.Expr[List[(String, Option[js.Any])]] = {
+  private def computeParams(c: Context): c.Expr[List[(String, js.Any)]] = {
     import c.universe._
 
     val props = {
       val params = c.internal.enclosingOwner.asMethod.paramLists.headOption.getOrElse(List())
       val convertedProps = params.map { param =>
-        val rawParamType = param.typeSignature
+        val paramType = param.typeSignature
         val converted = {
-          if (rawParamType.typeConstructor == typeOf[scala.scalajs.js.UndefOr[Any]].typeConstructor) {
-            val paramType = rawParamType.typeArgs.head
-            val converter = q"implicitly[JsWriter[$paramType]]"
-            q"${param.name.toTermName}.map(v => $converter.toJs(v)).toOption"
-          } else {
-            val paramType = rawParamType
-            val converter = q"implicitly[JsWriter[$paramType]]"
-            q"Some($converter.toJs(${param.name.toTermName}))"
-          }
+          val conv = c.inferImplicitValue(appliedType(typeOf[JsWriter[_]], paramType :: Nil))
+          q"$conv.toJs(${param.name.toTermName})"
         }
         (param.name.toString, converted)
       }
@@ -120,21 +113,9 @@ object ReactBridgeComponent {
       convertedProps
     }
 
-    c.Expr[List[(String, Option[js.Any])]](q"$props")
+    c.Expr[List[(String, js.Any)]](q"$props")
   }
 
-  def propsToDynamic(props: List[(String, Option[js.Any])]): js.Object = {
-    import scala.scalajs.js.Dynamic.literal
-
-    val jsProps = literal()
-    props.foreach { case (k, jsV) =>
-      jsV.foreach { v =>
-        jsProps.updateDynamic(k)(v)
-      }
-    }
-
-    jsProps.asInstanceOf[js.Object]
-  }
-
-
+  def propsToDynamic(props: List[(String, js.Any)]): js.Object =
+    js.Dictionary(props: _*).asInstanceOf[js.Object]
 }

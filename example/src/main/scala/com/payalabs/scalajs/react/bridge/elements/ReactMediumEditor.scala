@@ -11,5 +11,5 @@ import scala.scalajs.js
 object ReactMediumEditor extends ReactBridgeComponent {
   def apply(text: js.UndefOr[String] = js.undefined,
             onChange: js.UndefOr[String => Callback] = js.undefined,
-            options: js.UndefOr[Map[String, Any]] = js.undefined): WithPropsNoChildren = autoNoChildren
+            options: js.UndefOr[Map[String, js.Any]] = js.undefined): WithPropsNoChildren = autoNoChildren
 }
