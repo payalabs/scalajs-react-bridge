@@ -1,12 +1,13 @@
 package com.payalabs.scalajs.react
 
+import scala.concurrent.{ExecutionContext, Future}
 import scala.language.experimental.macros
 import scala.scalajs.js
-import scala.scalajs.js.JSConverters.JSRichOption
+import scala.scalajs.js.JSConverters.{JSRichFutureNonThenable, JSRichOption}
 import scala.scalajs.js.Object
 
 import japgolly.scalajs.react.component.Js
-import japgolly.scalajs.react.vdom.{TagMod, VdomNode}
+import japgolly.scalajs.react.vdom.{TagMod, VdomElement, VdomNode}
 import japgolly.scalajs.react.{CallbackTo, Children, CtorType}
 
 
@@ -47,6 +48,11 @@ package object bridge extends GeneratedImplicits {
       js.Dictionary(converted.toSeq: _*)
     }
   }
+
+  implicit def futureWriter[A](implicit writeA: JsWriter[A], executionContext: ExecutionContext): JsWriter[Future[A]] =
+    JsWriter(_.map(writeA.toJs).toJSPromise)
+
+  implicit def vdomElementWriter: JsWriter[VdomElement] = JsWriter(_.rawElement)
 
   type JsComponentType = Js.ComponentSimple[Object, CtorType.Summoner.Aux[Object, Children.Varargs, CtorType.PropsAndChildren]#CT, Js.UnmountedWithRawType[Object, Null, Js.RawMounted]]
 
