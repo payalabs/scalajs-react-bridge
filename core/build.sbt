@@ -54,7 +54,8 @@ pomExtra := {
   </developers>
 }
 
-sourceGenerators in Compile <+= sourceManaged in Compile map { dir =>
+sourceGenerators in Compile += Def.task {
+  val dir = (sourceManaged in Compile).value
   val file = dir / "com" / "payalabs" / "scalajs" / "react" / "bridge" / "GeneratedImplicits.scala"
 
   val f0_22 = (0 to 22).map { arity =>
@@ -91,5 +92,4 @@ sourceGenerators in Compile <+= sourceManaged in Compile map { dir =>
   )
 
   Seq(file)
-}
-
+}.taskValue
