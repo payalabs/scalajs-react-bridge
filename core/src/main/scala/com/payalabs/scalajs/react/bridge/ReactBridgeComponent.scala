@@ -130,9 +130,9 @@ object ReactBridgeComponent {
     import c.universe._
 
     val props = {
-      val params = c.internal.enclosingOwner.asMethod.paramLists.headOption.getOrElse(List())
+      val params = c.internal.enclosingOwner.asMethod.paramLists.flatten.filter(!_.isImplicit)
       val convertedProps = params.map { param =>
-        val rawParamType = param.typeSignature
+        val rawParamType = c.typecheck(Ident(param.name)).tpe
         val converted = {
           if (rawParamType.typeConstructor == typeOf[scala.scalajs.js.UndefOr[Any]].typeConstructor) {
             val paramType = rawParamType.typeArgs.head
