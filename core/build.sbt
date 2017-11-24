@@ -58,23 +58,19 @@ sourceGenerators in Compile += Def.task {
   val dir = (sourceManaged in Compile).value
   val file = dir / "com" / "payalabs" / "scalajs" / "react" / "bridge" / "GeneratedImplicits.scala"
 
-  val f0_22 = (0 to 22).map { arity =>
-    val argsParams = (1 to arity).map(i => s"T$i").mkString(",")
-    val params = if (argsParams.isEmpty) "R" else s"$argsParams,R"
-    val callbackParams = if (argsParams.isEmpty) "CallbackTo[R]" else s"$argsParams,CallbackTo[R]"
-    val valueParams = (1 to arity).map(i => s"_:T$i").mkString(",")
+  val functions = (0 to 22).map { arity =>
+    val indices = 1 to arity
+    val types = indices.map(i => s"T$i") :+ "R"
+    val tParams = types.mkString(", ")
+    val params = indices.map(i => s"x$i: T$i").mkString(", ")
+    val args = indices.map(i => s"x$i").mkString(", ")
     s"""
-       |implicit def function${arity}Writer[$params]: JsWriter[Function$arity[$params]] = {
-       |  new JsWriter[Function$arity[$params]] {
-       |    override def toJs(value: Function$arity[$params]): js.Any = fromFunction$arity(value)
-       |  }
-       |}
-       |
-       |implicit def function${arity}CallbackWriter[$params]: JsWriter[Function$arity[$callbackParams]] = {
-       |  new JsWriter[Function$arity[$callbackParams]] {
-       |    override def toJs(value: Function$arity[$callbackParams]): js.Any = fromFunction$arity(value($valueParams).runNow)
-       |  }
-       |}""".stripMargin
+       |  implicit def function${arity}Writer[$tParams](implicit writerR: JsWriter[R]): JsWriter[Function$arity[$tParams]] = {
+       |    new JsWriter[Function$arity[$tParams]] {
+       |      override def toJs(value: Function$arity[$tParams]): js.Any =
+       |        fromFunction$arity(($params) => writerR.toJs(value($args)))
+       |    }
+       | }""".stripMargin
   }.mkString("\n")
 
 
@@ -86,9 +82,9 @@ sourceGenerators in Compile += Def.task {
                     |import japgolly.scalajs.react.CallbackTo
                     |
                     |trait GeneratedImplicits {
-                    |  $f0_22
+                    |  $functions
                     |}
-        """.stripMargin
+        """.stripMargin.trim
   )
 
   Seq(file)

@@ -1,15 +1,16 @@
 package com.payalabs.scalajs.react.bridge.test
 
-import com.payalabs.scalajs.react.bridge.{JsWriter, ReactBridgeComponent, ReactBridgeComponentNoSpecialProps, ReactBridgeComponentNoSpecialPropsNoChildren, WithPropsAndTagModsAndChildren, WithPropsAndTagsMods, WithPropsNoChildren}
+import scala.scalajs.js
+
+import com.payalabs.scalajs.react.bridge.{JsWriter, ReactBridgeComponent, ReactBridgeComponentNoSpecialProps, ReactBridgeComponentNoSpecialPropsNoChildren, WithPropsAndTagsMods, WithPropsNoChildren}
 import japgolly.scalajs.react._
-import japgolly.scalajs.react.vdom.all._
 import japgolly.scalajs.react.test.ReactTestUtils
 import japgolly.scalajs.react.test.ReactTestUtils.MountedOutput
-import org.scalatest.FunSuite
 import japgolly.scalajs.react.test.raw.ReactAddonsTestUtils.Simulate
+import japgolly.scalajs.react.vdom.all._
 import org.scalajs.dom.raw.Node
+import org.scalatest.FunSuite
 
-import scala.scalajs.js
 
 class NameType(val name :String) extends AnyVal
 
@@ -141,10 +142,11 @@ class ReactBridgeComponentTest extends FunSuite {
 
   test("map properties") {
     object TestComponent extends ReactBridgeComponent {
-      def apply(map: js.UndefOr[Map[String, Any]] = js.undefined): WithPropsNoChildren = this.autoNoChildren
+      def apply(map: js.UndefOr[Map[String, js.Any]] = js.undefined): WithPropsNoChildren = this.autoNoChildren
     }
 
-    val testComponent = TestComponent(map = Map("one" -> 1, "two" -> "2", "foo" -> "bar"))()
+    val testComponent =
+      TestComponent(map = Map[String, js.Any]("one" -> 1, "two" -> "2", "foo" -> "bar"))()
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
     assert(mounted.getDOMNode.querySelector("#map").getAttribute("data-test") === "{one->1,two->2,foo->bar}")
@@ -239,7 +241,7 @@ class ReactBridgeComponentTest extends FunSuite {
     object TestComponent extends ReactBridgeComponent {
       def apply(onSomething1: js.UndefOr[Int => Callback] = js.undefined,
                 onSomething2: js.UndefOr[(Int, String) => Callback] = js.undefined,
-                onSomething3: js.UndefOr[(Int, String, js.Array[Any]) => Callback] = js.undefined,
+                onSomething3: js.UndefOr[(Int, String, js.Array[js.Any]) => Callback] = js.undefined,
                 onSomething4: js.UndefOr[Callback] = js.undefined): WithPropsNoChildren = this.autoNoChildren
     }
 
@@ -259,7 +261,7 @@ class ReactBridgeComponentTest extends FunSuite {
       assert(s === "two")
     }
 
-    def change3(i: Int, s: String, a: js.Array[Any]): Callback = Callback {
+    def change3(i: Int, s: String, a: js.Array[js.Any]): Callback = Callback {
       something3 = true
       assert(i === 1)
       assert(s === "two")

@@ -1,22 +1,34 @@
 package com.payalabs.scalajs.react
 
+import scala.concurrent.{ExecutionContext, Future}
 import scala.language.experimental.macros
-import com.payalabs.scalajs.react.bridge.JsWriter
-import japgolly.scalajs.react.component.Js
-import japgolly.scalajs.react.{CallbackTo, Children, CtorType}
-import japgolly.scalajs.react.vdom.{TagMod, VdomNode}
-
 import scala.scalajs.js
+import scala.scalajs.js.JSConverters.{JSRichFutureNonThenable, JSRichOption}
 import scala.scalajs.js.Object
 
-trait LowPriorityImplicits {
-  implicit def anyWriter[T]: JsWriter[T] = _.asInstanceOf[js.Any]
-}
+import japgolly.scalajs.react.component.Js
+import japgolly.scalajs.react.vdom.{TagMod, VdomElement, VdomNode}
+import japgolly.scalajs.react.{CallbackTo, Children, CtorType}
 
-package object bridge extends GeneratedImplicits with LowPriorityImplicits {
-  implicit def callbackWriter[T]: JsWriter[CallbackTo[T]] = _.toJsFn
 
-  implicit def seqWriter[T : JsWriter]: JsWriter[Seq[T]] = {
+package object bridge extends GeneratedImplicits {
+  def writerFromConversion[A](implicit conv: A => js.Any): JsWriter[A] = JsWriter(x => x)
+  implicit def stringWriter: JsWriter[String] = writerFromConversion[String]
+  implicit def intWriter: JsWriter[Int] = writerFromConversion[Int]
+  implicit def boolWriter: JsWriter[Boolean] = writerFromConversion[Boolean]
+  implicit def unitWriter: JsWriter[Unit] = writerFromConversion[Unit]
+  implicit def jsAnyWriter[A <: js.Any]: JsWriter[A] = JsWriter(identity)
+
+  implicit def callbackToWriter[T](implicit writerT: JsWriter[T]): JsWriter[CallbackTo[T]] =
+    JsWriter(value => value.map(writerT.toJs).runNow())
+
+  implicit def undefOrWriter[A](implicit writerA: JsWriter[A]): JsWriter[js.UndefOr[A]] =
+    JsWriter(_.map(writerA.toJs))
+
+  implicit def optionWriter[A](implicit writerA: JsWriter[A]): JsWriter[Option[A]] =
+    JsWriter(_.map(writerA.toJs).orUndefined)
+
+  implicit def seqWriter[T: JsWriter]: JsWriter[Seq[T]] = {
     val elementWriter = implicitly[JsWriter[T]]
 
     (value: Seq[T]) => js.Array(value.map(e => elementWriter.toJs(e)): _*)
@@ -36,6 +48,11 @@ package object bridge extends GeneratedImplicits with LowPriorityImplicits {
       js.Dictionary(converted.toSeq: _*)
     }
   }
+
+  implicit def futureWriter[A](implicit writeA: JsWriter[A], executionContext: ExecutionContext): JsWriter[Future[A]] =
+    JsWriter(_.map(writeA.toJs).toJSPromise)
+
+  implicit def vdomElementWriter: JsWriter[VdomElement] = JsWriter(_.rawElement)
 
   type JsComponentType = Js.ComponentSimple[Object, CtorType.Summoner.Aux[Object, Children.Varargs, CtorType.PropsAndChildren]#CT, Js.UnmountedWithRawType[Object, Null, Js.RawMounted]]
 

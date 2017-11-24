@@ -59,65 +59,35 @@ object ReactBridgeComponent {
   def autoImpl(c: Context): c.Expr[WithProps] = {
     import c.universe._
 
-    val props = computeParams(c)
+    val ctor = symbolOf[WithProps]
 
-    c.Expr[WithProps](
-      q"""
-         {
-           import com.payalabs.scalajs.react.bridge.JsWriter
-           import com.payalabs.scalajs.react.bridge.ReactBridgeComponent
-
-           new WithProps(${c.prefix.tree}.jsComponent, ReactBridgeComponent.propsToDynamic($props))
-         }"""
-    )
+    c.Expr(q"new $ctor(${c.prefix.tree}.jsComponent, ${propsObject(c)})")
   }
 
   def autoNoChildrenImpl(c: Context): c.Expr[WithPropsNoChildren] = {
     import c.universe._
 
-    val props = computeParams(c)
-
-    c.Expr[WithPropsNoChildren](
-      q"""
-         {
-           import com.payalabs.scalajs.react.bridge.JsWriter
-           import com.payalabs.scalajs.react.bridge.ReactBridgeComponent
-
-           new WithPropsNoChildren(${c.prefix.tree}.jsComponent, ReactBridgeComponent.propsToDynamic($props))
-         }"""
-    )
+    val ctor = symbolOf[WithPropsNoChildren]
+    c.Expr(q"new $ctor(${c.prefix.tree}.jsComponent, ${propsObject(c)})")
   }
 
   def autoNoTagModsImpl(c: Context): c.Expr[WithPropsAndTagsMods] = {
     import c.universe._
 
-    val props = computeParams(c)
-
-    c.Expr[WithPropsAndTagsMods](
-      q"""
-         {
-           import com.payalabs.scalajs.react.bridge.JsWriter
-           import com.payalabs.scalajs.react.bridge.ReactBridgeComponent
-
-           new WithPropsAndTagsMods(${c.prefix.tree}.jsComponent, ReactBridgeComponent.propsToDynamic($props), List())
-         }"""
-    )
+    val ctor = symbolOf[WithPropsAndTagsMods]
+    c.Expr(q"new $ctor(${c.prefix.tree}.jsComponent, ${propsObject(c)}, _root_.scala.List())")
   }
 
   def autoNoTagModsNoChildrenImpl(c: Context): c.Expr[VdomElement] = {
     import c.universe._
 
-    val props = computeParams(c)
+    val ctor = symbolOf[WithPropsAndTagModsAndChildren]
+    c.Expr(q"new $ctor(${c.prefix.tree}.jsComponent, ${propsObject(c)}, _root_.scala.List()).apply")
+  }
 
-    c.Expr[VdomElement](
-      q"""
-         {
-           import com.payalabs.scalajs.react.bridge._
-           import com.payalabs.scalajs.react.bridge.ReactBridgeComponent
-
-           new WithPropsAndTagModsAndChildren(${c.prefix.tree}.jsComponent, ReactBridgeComponent.propsToDynamic($props), List()).apply
-         }"""
-    )
+  private def propsObject(c: Context): c.Expr[js.Object] = {
+    import c.universe._
+    c.Expr(q"_root_.com.payalabs.scalajs.react.bridge.ReactBridgeComponent.propsToDynamic(${computeParams(c)})")
   }
 
   /**
@@ -126,23 +96,16 @@ object ReactBridgeComponent {
     * @return
     * @see JsWriter
     */
-  private def computeParams(c: Context): c.Expr[List[(String, Option[js.Any])]] = {
+  private def computeParams(c: Context): c.Expr[List[(String, js.Any)]] = {
     import c.universe._
 
     val props = {
       val params = c.internal.enclosingOwner.asMethod.paramLists.flatten.filter(!_.isImplicit)
       val convertedProps = params.map { param =>
-        val rawParamType = c.typecheck(Ident(param.name)).tpe
+        val paramType = c.typecheck(Ident(param.name)).tpe
         val converted = {
-          if (rawParamType.typeConstructor == typeOf[scala.scalajs.js.UndefOr[Any]].typeConstructor) {
-            val paramType = rawParamType.typeArgs.head
-            val converter = q"implicitly[JsWriter[$paramType]]"
-            q"${param.name.toTermName}.map(v => $converter.toJs(v)).toOption"
-          } else {
-            val paramType = rawParamType
-            val converter = q"implicitly[JsWriter[$paramType]]"
-            q"Some($converter.toJs(${param.name.toTermName}))"
-          }
+          val conv = c.inferImplicitValue(appliedType(typeOf[JsWriter[_]], paramType :: Nil))
+          q"$conv.toJs(${param.name.toTermName})"
         }
         (param.name.toString, converted)
       }
@@ -150,21 +113,9 @@ object ReactBridgeComponent {
       convertedProps
     }
 
-    c.Expr[List[(String, Option[js.Any])]](q"$props")
+    c.Expr[List[(String, js.Any)]](q"$props")
   }
 
-  def propsToDynamic(props: List[(String, Option[js.Any])]): js.Object = {
-    import scala.scalajs.js.Dynamic.literal
-
-    val jsProps = literal()
-    props.foreach { case (k, jsV) =>
-      jsV.foreach { v =>
-        jsProps.updateDynamic(k)(v)
-      }
-    }
-
-    jsProps.asInstanceOf[js.Object]
-  }
-
-
+  def propsToDynamic(props: List[(String, js.Any)]): js.Object =
+    js.Dictionary(props: _*).asInstanceOf[js.Object]
 }
