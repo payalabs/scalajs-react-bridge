@@ -100,9 +100,9 @@ object ReactBridgeComponent {
     import c.universe._
 
     val props = {
-      val params = c.internal.enclosingOwner.asMethod.paramLists.headOption.getOrElse(List())
+      val params = c.internal.enclosingOwner.asMethod.paramLists.flatten.filter(!_.isImplicit)
       val convertedProps = params.map { param =>
-        val paramType = param.typeSignature
+        val paramType = c.typecheck(Ident(param.name)).tpe
         val converted = {
           val conv = c.inferImplicitValue(appliedType(typeOf[JsWriter[_]], paramType :: Nil))
           q"$conv.toJs(${param.name.toTermName})"
