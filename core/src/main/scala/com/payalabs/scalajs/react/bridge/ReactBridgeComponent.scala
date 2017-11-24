@@ -35,15 +35,12 @@ abstract class ReactBridgeComponent {
   // So, we use our own "parsing" to extract the simple name
   protected lazy val componentName: String = this.getClass.getName.split('.').last.split('$').reverse.dropWhile(_.forall(_.isDigit)).head
 
-  protected lazy val jsComponent = {
+  protected lazy val componentValue: js.Any = {
     val componentPrefixes = if (componentNamespace.trim.isEmpty) Array[String]() else componentNamespace.split('.')
-
-    val componentFunction = componentPrefixes.foldLeft(global) {
-      _.selectDynamic(_)
-    }.selectDynamic(componentName)
-
-    JsComponent[js.Object, Children.Varargs, Null](componentFunction)
+    (componentPrefixes :+ componentName).foldLeft(global)(_ selectDynamic _)
   }
+
+  protected lazy val jsComponent: JsComponentType = JsComponent[js.Object, Children.Varargs, Null](componentValue)
 
   def auto: WithProps = macro ReactBridgeComponent.autoImpl
 

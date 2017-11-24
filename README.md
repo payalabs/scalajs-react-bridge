@@ -78,7 +78,8 @@ Each of the macros return type that signify what has been already processed (and
 ### Overriding the default
 If a component cannot follow the expected conventions, it can override them as following:
 - If the class name doesn't match the function name, it can override `componentName` supply a different name. 
-- If the function isn't exposed in the global space, it can override `componentNamespace` to supply the path to the function. For example, if the component function is exposed as `foo.bar.MyComponent`, you can override `componentNamespace` to return `foo.bar`. 
+- If the function isn't exposed in the global space, it can override `componentNamespace` to supply the path to the function. For example, if the component function is exposed as `foo.bar.MyComponent`, you can override `componentNamespace` to return `foo.bar`.
+- You may override `componentValue` to use any `js.Any` you can reference. This works well with `@JSImport`ed objects.
 - If overriding `componentName` and/or `componentNamespace` isn't sufficient, you may override `jsComponent` to supply the component function.
 - If an apply method's parameters require transformation beyond what is implemented by the macros, don't use the macros as their implementation. Instead, supply your own implementation, which may still use the `jsComponent` after transforming the method parameters appropriately.
 
