@@ -44,6 +44,13 @@ div(
 
 ## Getting started
 
+Add the following dependency to your scalajs-react project:
+ ```scala
+libraryDependencies += "com.payalabs" %%% "scalajs-react-bridge" % "0.4.0"
+```
+
+To use the latest snapshot version
+
 1. Add the Sonatype snapshots resolver to your SBT configuration:
  ```scala
 resolvers += Resolver.sonatypeRepo("snapshots")
@@ -51,7 +58,7 @@ resolvers += Resolver.sonatypeRepo("snapshots")
 
 2. Add the following dependency to your scalajs-react project:
  ```scala
-libraryDependencies += "com.payalabs" %%% "scalajs-react-bridge" % "0.4.0-SNAPSHOT"
+libraryDependencies += "com.payalabs" %%% "scalajs-react-bridge" % "0.5.0-SNAPSHOT"
 ```
 
 ## Defining components
