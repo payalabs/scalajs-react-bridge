@@ -14,8 +14,18 @@ import japgolly.scalajs.react.{CallbackTo, Children, CtorType}
 package object bridge extends GeneratedImplicits {
   def writerFromConversion[A](implicit conv: A => js.Any): JsWriter[A] = JsWriter(x => x)
   implicit def stringWriter: JsWriter[String] = writerFromConversion[String]
-  implicit def intWriter: JsWriter[Int] = writerFromConversion[Int]
+
   implicit def boolWriter: JsWriter[Boolean] = writerFromConversion[Boolean]
+
+  // Note: Char and Long not supported here, since in Scala.js they map to opaque types, which
+  // may not map well to the underlying components expectations.
+  implicit def byteWriter: JsWriter[Byte] = writerFromConversion[Byte]
+  implicit def shortWriter: JsWriter[Short] = writerFromConversion[Short]
+  implicit def intWriter: JsWriter[Int] = writerFromConversion[Int]
+
+  implicit def floatWriter: JsWriter[Float] = writerFromConversion[Float]
+  implicit def doubleWriter: JsWriter[Double] = writerFromConversion[Double]
+
   implicit def unitWriter: JsWriter[Unit] = writerFromConversion[Unit]
   implicit def jsAnyWriter[A <: js.Any]: JsWriter[A] = JsWriter(identity)
 

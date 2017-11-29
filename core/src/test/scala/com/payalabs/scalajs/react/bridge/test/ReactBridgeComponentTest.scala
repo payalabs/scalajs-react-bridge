@@ -34,6 +34,35 @@ object TestComponent extends ReactBridgeComponent {
 
 class ReactBridgeComponentTest extends FunSuite {
 
+  test("all primitive types supported") {
+    object TestComponent extends ReactBridgeComponent {
+      def apply(boolean: js.UndefOr[Boolean] = js.undefined,
+                byte: js.UndefOr[Byte] = js.undefined,
+                short: js.UndefOr[Short] = js.undefined,
+                int: js.UndefOr[Int] = js.undefined,
+                float: js.UndefOr[Float] = js.undefined,
+                double: js.UndefOr[Double] = js.undefined
+               ): WithPropsNoChildren = this.autoNoChildren
+    }
+
+    val testComponent = TestComponent(
+      boolean = true,
+      byte = 1.toByte,
+      short = 2.toShort,
+      int = 3,
+      float = 5.1f,
+      double = 6.2
+    )
+
+    val mounted = ReactTestUtils.renderIntoDocument(testComponent)
+    assert(mounted.getDOMNode.querySelector("#boolean").getAttribute("data-test") === "true")
+    assert(mounted.getDOMNode.querySelector("#byte").getAttribute("data-test") === "1")
+    assert(mounted.getDOMNode.querySelector("#short").getAttribute("data-test") === "2")
+    assert(mounted.getDOMNode.querySelector("#int").getAttribute("data-test") === "3")
+    assert(mounted.getDOMNode.querySelector("#float").getAttribute("data-test") === 5.1f.toString)
+    assert(mounted.getDOMNode.querySelector("#double").getAttribute("data-test") === 6.2.toString)
+  }
+
   test("scalar properties omitted dom attr") {
     object TestComponent extends ReactBridgeComponent {
       def apply(name: js.UndefOr[String] = js.undefined, age: js.UndefOr[Int] = js.undefined): WithPropsNoChildren = this.autoNoChildren
