@@ -5,7 +5,7 @@ val reactV = "15.5.3"
 organization := "com.payalabs"
 name := "scalajs-react-bridge"
 
-version := "0.4.0"
+version := "0.5.0-SNAPSHOT"
 
 scalaVersion := "2.12.2"
 

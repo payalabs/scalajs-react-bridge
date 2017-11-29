@@ -6,7 +6,7 @@ val core = project in file("core")
 
 scalaVersion := "2.12.2"
 
-version := "0.4.0"
+version := "0.5.0-SNAPSHOT"
 
 val example = (project in file("example")).dependsOn(core).settings(
   publish := (),
