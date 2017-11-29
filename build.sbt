@@ -4,9 +4,14 @@ enablePlugins(ScalaJSPlugin)
 
 val core = project in file("core")
 
+scalaVersion := "2.12.2"
+
+version := "0.4.0"
+
 val example = (project in file("example")).dependsOn(core).settings(
   publish := (),
-  publishLocal := ()
+  publishLocal := (),
+  publishArtifact := false
 )
 
 val scalaJsReactBridge = (project in file(".")).aggregate(

@@ -5,7 +5,7 @@ val reactV = "15.5.3"
 organization := "com.payalabs"
 name := "scalajs-react-bridge"
 
-version := "0.4.0-SNAPSHOT"
+version := "0.4.0"
 
 scalaVersion := "2.12.2"
 
@@ -33,26 +33,22 @@ jsDependencies += "org.webjars.npm" % "react" % reactV % Test / "react-with-addo
 jsDependencies += "org.webjars.npm" % "react-dom" % reactV % Test / "react-dom.js" minified "react-dom.min.js" commonJSName "ReactDOM" dependsOn "react-with-addons.js"
 jsDependencies in Test += ProvidedJS / "test-component.js" dependsOn "react-with-addons.js"
 
-pomExtra := {
-  <url>https://github.com/payalabs/scalajs-react-bridge</url>
-  <licenses>
-    <license>
-      <name>The MIT License (MIT)</name>
-      <url>https://opensource.org/licenses/MIT</url>
-    </license>
-  </licenses>
-  <scm>
-    <connection>scm:git:github.com/payalabs/scalajs-react-bridge</connection>
-    <developerConnection>scm:git:git@github.com:payalabs/scalajs-react-bridge</developerConnection>
-    <url>github.com/payalabs/scalajs-react-bridge</url>
-  </scm>
-  <developers>
-    <developer>
-      <id>ramnivas</id>
-      <name>Ramnivas Laddad</name>
-    </developer>
-  </developers>
-}
+licenses := Seq("The MIT License (MIT)" -> url("https://opensource.org/licenses/MIT"))
+homepage := Some(url("https://github.com/payalabs/scalajs-react-bridge"))
+scmInfo := Some(
+  ScmInfo(
+    url("https://github.com/payalabs/scalajs-react-bridge"),
+    "scm:git@github.com:payalabs/scalajs-react-bridge.git"
+  )
+)
+developers := List(
+  Developer(
+    id    = "ramnivas",
+    name  = "Ramnivas Laddad",
+    email = "",
+    url   = url("https://github.com/payalabs")
+  )
+)
 
 sourceGenerators in Compile += Def.task {
   val dir = (sourceManaged in Compile).value
