@@ -335,6 +335,19 @@ class ReactBridgeComponentTest extends FunSuite {
     assert(mounted.getDOMNode.querySelector("#age").getAttribute("data-test") === "25")
   }
 
+  test("undefined props do not get passed to the underlying component") {
+    object TestComponent extends ReactBridgeComponent {
+      def apply(name: js.UndefOr[String] = js.undefined, age: js.UndefOr[Int] = js.undefined): WithPropsNoChildren = this.autoNoChildren
+    }
+
+    val testComponent = TestComponent(age = 25)
+
+    val mounted = ReactTestUtils.renderIntoDocument(testComponent)
+    println(mounted.getDOMNode.outerHTML)
+    assert(mounted.getDOMNode.querySelector("#name") == null)
+    assert(mounted.getDOMNode.querySelector("#age").getAttribute("data-test") === "25")
+  }
+
   test("supplied key") {
     object TestComponent extends ReactBridgeComponentNoSpecialPropsNoChildren
 

@@ -113,6 +113,10 @@ object ReactBridgeComponent {
     c.Expr[List[(String, js.Any)]](q"$props")
   }
 
-  def propsToDynamic(props: List[(String, js.Any)]): js.Object =
-    js.Dictionary(props: _*).asInstanceOf[js.Object]
+  def propsToDynamic(props: List[(String, js.Any)]): js.Object = {
+    // If an argument is undefined, simply don't pass it to the JS world. Otherwise, `Object.keys`
+    // etc will find the argument (with undefined as the value). The expectation in the JS world
+    // is to simply not pass the argument if the value is undefined.
+    js.Dictionary(props.filterNot(prop => js.isUndefined(prop._2)): _*).asInstanceOf[js.Object]
+  }
 }
