@@ -4,7 +4,7 @@ enablePlugins(ScalaJSPlugin)
 
 val core = project in file("core")
 
-scalaVersion := "2.12.2"
+crossScalaVersions := Seq("2.12.2", "2.11.12")
 
 version := "0.5.0-SNAPSHOT"
 
@@ -21,5 +21,3 @@ val scalaJsReactBridge = (project in file(".")).aggregate(
   publish := (),
   publishLocal := ()
 )
-
-
