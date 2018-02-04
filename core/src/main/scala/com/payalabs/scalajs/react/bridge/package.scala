@@ -41,22 +41,24 @@ package object bridge extends GeneratedImplicits {
   implicit def seqWriter[T: JsWriter]: JsWriter[Seq[T]] = {
     val elementWriter = implicitly[JsWriter[T]]
 
-    (value: Seq[T]) => js.Array(value.map(e => elementWriter.toJs(e)): _*)
+    JsWriter((value: Seq[T]) => js.Array(value.map(e => elementWriter.toJs(e)): _*))
   }
 
   implicit def immutableSeqWriter[T : JsWriter]: JsWriter[scala.collection.immutable.Seq[T]] = {
     val elementWriter = implicitly[JsWriter[T]]
 
-    (value: scala.collection.immutable.Seq[T]) => js.Array(value.map(e => elementWriter.toJs(e)): _*)
+    JsWriter((value: scala.collection.immutable.Seq[T]) => js.Array(value.map(e => elementWriter.toJs(e)): _*))
   }
 
   implicit def mapWriter[T : JsWriter]: JsWriter[Map[String, T]] = {
     val elementWriter = implicitly[JsWriter[T]]
 
-    (value: Map[String, T]) => {
-      val converted = value.map { case (k, v) => (k, elementWriter.toJs(v)) }
-      js.Dictionary(converted.toSeq: _*)
-    }
+    JsWriter(
+      (value: Map[String, T]) => {
+        val converted = value.map { case (k, v) => (k, elementWriter.toJs(v)) }
+        js.Dictionary(converted.toSeq: _*)
+      }
+    )
   }
 
   implicit def futureWriter[A](implicit writeA: JsWriter[A], executionContext: ExecutionContext): JsWriter[Future[A]] =
