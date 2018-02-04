@@ -38,6 +38,9 @@ package object bridge extends GeneratedImplicits {
   implicit def optionWriter[A](implicit writerA: JsWriter[A]): JsWriter[Option[A]] =
     JsWriter(_.map(writerA.toJs).orUndefined)
 
+  implicit def enumerationWriter[T <: Enumeration#Value]: JsWriter[T] =
+    JsWriter(_.toString)
+
   implicit def seqWriter[T: JsWriter]: JsWriter[Seq[T]] = {
     val elementWriter = implicitly[JsWriter[T]]
 

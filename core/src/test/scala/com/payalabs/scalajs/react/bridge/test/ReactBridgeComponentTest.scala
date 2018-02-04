@@ -156,6 +156,25 @@ class ReactBridgeComponentTest extends FunSuite {
     assert(mounted.getDOMNode.querySelector("#className").getAttribute("data-test") === "test-classname")
   }
 
+  test("enumeration properties") {
+    object ColorEnumeration extends Enumeration {
+      val Red: Value = Value("red")
+      val Green: Value = Value("green")
+      val Blue: Value = Value("blue")
+    }
+
+    object TestComponent extends ReactBridgeComponent {
+      def apply(foregroundColor: js.UndefOr[ColorEnumeration.Value],
+                backgroundColor: js.UndefOr[ColorEnumeration.Value]): WithPropsNoChildren = this.autoNoChildren
+    }
+
+    val testComponent = TestComponent(foregroundColor = ColorEnumeration.Red, backgroundColor = ColorEnumeration.Green)()
+
+    val mounted = ReactTestUtils.renderIntoDocument(testComponent)
+    assert(mounted.getDOMNode.querySelector("#foregroundColor").getAttribute("data-test") === "red")
+    assert(mounted.getDOMNode.querySelector("#backgroundColor").getAttribute("data-test") === "green")
+  }
+
   test("array properties") {
     object TestComponent extends ReactBridgeComponent {
       def apply(names: js.UndefOr[Seq[String]], ages: js.UndefOr[scala.collection.immutable.Seq[Int]]): WithPropsNoChildren = this.autoNoChildren
