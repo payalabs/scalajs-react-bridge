@@ -8,6 +8,7 @@ name := "scalajs-react-bridge"
 version := "0.5.0-SNAPSHOT"
 
 crossScalaVersions := Seq("2.12.2", "2.11.12")
+scalaVersion := crossScalaVersions.value.head
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-feature")
 
