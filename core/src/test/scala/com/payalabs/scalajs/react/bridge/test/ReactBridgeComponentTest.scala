@@ -1,7 +1,6 @@
 package com.payalabs.scalajs.react.bridge.test
 
 import scala.scalajs.js
-
 import com.payalabs.scalajs.react.bridge.{JsWriter, ReactBridgeComponent, ReactBridgeComponentNoSpecialProps, ReactBridgeComponentNoSpecialPropsNoChildren, WithPropsAndTagsMods, WithPropsNoChildren}
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.test.ReactTestUtils
@@ -10,6 +9,8 @@ import japgolly.scalajs.react.test.raw.ReactAddonsTestUtils.Simulate
 import japgolly.scalajs.react.vdom.all._
 import org.scalajs.dom.raw.Node
 import org.scalatest.FunSuite
+
+import scala.scalajs.js.|
 
 
 class NameType(val name :String) extends AnyVal
@@ -154,6 +155,18 @@ class ReactBridgeComponentTest extends FunSuite {
     assert(mounted.getDOMNode.querySelector("#age").getAttribute("data-test") === "25")
     assert(mounted.getDOMNode.querySelector("#id").getAttribute("data-test") === "test-id")
     assert(mounted.getDOMNode.querySelector("#className").getAttribute("data-test") === "test-classname")
+  }
+
+  test("union properties") {
+    object TestComponent extends ReactBridgeComponent {
+      def apply(unionLeft: String | Double, unionRight: String | Double): WithPropsNoChildren = this.autoNoChildren
+    }
+
+    val testComponent = TestComponent(unionLeft = "foo", unionRight = 25)()
+
+    val mounted = ReactTestUtils.renderIntoDocument(testComponent)
+    assert(mounted.getDOMNode.querySelector("#unionLeft").getAttribute("data-test") === "foo")
+    assert(mounted.getDOMNode.querySelector("#unionRight").getAttribute("data-test") === "25")
   }
 
   test("enumeration properties") {
