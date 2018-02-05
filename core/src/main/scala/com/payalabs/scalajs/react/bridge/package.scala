@@ -2,9 +2,10 @@ package com.payalabs.scalajs.react
 
 import scala.concurrent.{ExecutionContext, Future}
 import scala.language.experimental.macros
+import scala.reflect.ClassTag
 import scala.scalajs.js
 import scala.scalajs.js.JSConverters.{JSRichFutureNonThenable, JSRichOption}
-import scala.scalajs.js.Object
+import scala.scalajs.js.{Object, |}
 
 import japgolly.scalajs.react.component.Js
 import japgolly.scalajs.react.vdom.{TagMod, VdomElement, VdomNode}
@@ -37,6 +38,12 @@ package object bridge extends GeneratedImplicits {
 
   implicit def optionWriter[A](implicit writerA: JsWriter[A]): JsWriter[Option[A]] =
     JsWriter(_.map(writerA.toJs).orUndefined)
+
+  implicit def unionWriter[A : ClassTag, B : ClassTag](implicit writerA: JsWriter[A], writerB: JsWriter[B]): JsWriter[A | B] =
+    JsWriter({
+      case value: A => writerA.toJs(value)
+      case value: B => writerB.toJs(value)
+    })
 
   implicit def enumerationWriter[T <: Enumeration#Value]: JsWriter[T] =
     JsWriter(_.toString)
