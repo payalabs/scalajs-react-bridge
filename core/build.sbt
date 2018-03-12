@@ -14,7 +14,7 @@ scalacOptions := Seq("-unchecked", "-deprecation", "-feature")
 
 libraryDependencies ++= {
   val scalaJsDomV = "0.9.3"
-  val scalaJsReactV = "1.1.0"
+  val scalaJsReactV = "1.2.0"
   val scalatestV = "3.0.1"
 
   Seq(
