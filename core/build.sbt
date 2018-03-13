@@ -1,6 +1,6 @@
 enablePlugins(ScalaJSPlugin)
 
-val reactV = "15.5.3"
+val reactV = "16.2.0"
 
 organization := "com.payalabs"
 name := "scalajs-react-bridge"
@@ -30,9 +30,9 @@ jsDependencies += RuntimeDOM
 
 jsEnv := PhantomJSEnv().value
 
-jsDependencies += "org.webjars.npm" % "react" % reactV % Test / "react-with-addons.js" minified "react-with-addons.min.js" commonJSName "React"
-jsDependencies += "org.webjars.npm" % "react-dom" % reactV % Test / "react-dom.js" minified "react-dom.min.js" commonJSName "ReactDOM" dependsOn "react-with-addons.js"
-jsDependencies in Test += ProvidedJS / "test-component.js" dependsOn "react-with-addons.js"
+jsDependencies += "org.webjars.npm" % "react" % reactV % Test / "cjs/react.development.js" minified "cjs/react.production.min.js" commonJSName "React"
+jsDependencies += "org.webjars.npm" % "react-dom" % reactV % Test / "cjs/react-dom.development.js" minified "cjs/react-dom.production.min.js" commonJSName "ReactDOM" dependsOn "cjs/react.development.js"
+jsDependencies in Test += ProvidedJS / "test-component.js" dependsOn "cjs/react.development.js"
 
 licenses := Seq("The MIT License (MIT)" -> url("https://opensource.org/licenses/MIT"))
 homepage := Some(url("https://github.com/payalabs/scalajs-react-bridge"))
