@@ -76,7 +76,7 @@ package object bridge extends GeneratedImplicits {
 
   implicit def vdomElementWriter: JsWriter[VdomElement] = JsWriter(_.rawElement)
 
-  type JsComponentType = Js.ComponentSimple[Object, CtorType.Summoner.Aux[Object, Children.Varargs, CtorType.PropsAndChildren]#CT, Js.UnmountedWithRawType[Object, Null, Js.RawMounted]]
+  type JsComponentType = Js.ComponentSimple[Object, CtorType.Summoner.Aux[Object, Children.Varargs, CtorType.PropsAndChildren]#CT, Js.UnmountedWithRawType[Object, Null, Js.RawMounted[Object, Null]]]
 
   def extractPropsAndChildren(attrAndChildren: Seq[TagMod]): (js.Object, List[VdomNode]) = {
     import japgolly.scalajs.react.vdom.Implicits._
