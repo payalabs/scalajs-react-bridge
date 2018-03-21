@@ -1,6 +1,6 @@
 enablePlugins(ScalaJSPlugin)
 
-val reactV = "15.5.3"
+val reactV = "16.2.0"
 
 organization := "com.payalabs"
 name := "scalajs-react-bridge"
@@ -14,7 +14,7 @@ scalacOptions := Seq("-unchecked", "-deprecation", "-feature")
 
 libraryDependencies ++= {
   val scalaJsDomV = "0.9.3"
-  val scalaJsReactV = "1.1.0"
+  val scalaJsReactV = "1.2.0"
   val scalatestV = "3.0.1"
 
   Seq(
@@ -26,13 +26,12 @@ libraryDependencies ++= {
   )
 }
 
-jsDependencies += RuntimeDOM
+jsEnv := new org.scalajs.jsenv.jsdomnodejs.JSDOMNodeJSEnv
 
-jsEnv := PhantomJSEnv().value
-
-jsDependencies += "org.webjars.npm" % "react" % reactV % Test / "react-with-addons.js" minified "react-with-addons.min.js" commonJSName "React"
-jsDependencies += "org.webjars.npm" % "react-dom" % reactV % Test / "react-dom.js" minified "react-dom.min.js" commonJSName "ReactDOM" dependsOn "react-with-addons.js"
-jsDependencies in Test += ProvidedJS / "test-component.js" dependsOn "react-with-addons.js"
+jsDependencies += "org.webjars.npm" % "react" % reactV % Test / "umd/react.development.js" minified "umd/react.production.min.js" commonJSName "React"
+jsDependencies += "org.webjars.npm" % "react-dom" % reactV % Test / "umd/react-dom.development.js" minified "umd/react-dom.production.min.js" commonJSName "ReactDOM" dependsOn "umd/react.development.js"
+jsDependencies in Test += ProvidedJS / "test-component.js" dependsOn "umd/react.development.js"
+jsDependencies in Test += "org.webjars.npm" % "react-dom" % reactV % Test / "umd/react-dom-test-utils.development.js" minified "umd/react-dom-test-utils.production.min.js" commonJSName "ReactTestUtils" dependsOn "umd/react-dom.development.js"
 
 licenses := Seq("The MIT License (MIT)" -> url("https://opensource.org/licenses/MIT"))
 homepage := Some(url("https://github.com/payalabs/scalajs-react-bridge"))
