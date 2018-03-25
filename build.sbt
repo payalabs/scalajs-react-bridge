@@ -7,7 +7,7 @@ val core = project in file("core")
 crossScalaVersions := Seq("2.12.2", "2.11.12")
 scalaVersion := crossScalaVersions.value.head
 
-version := "0.6.0-SNAPSHOT"
+version := "0.6.0"
 
 val example = (project in file("example")).dependsOn(core).settings(
   publish := (),
