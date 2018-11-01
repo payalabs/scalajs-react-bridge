@@ -6,3 +6,4 @@ target/
 .idea/
 bower_components/
 node_modules/
+example/dist
