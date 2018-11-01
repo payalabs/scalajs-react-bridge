@@ -46,7 +46,7 @@ div(
 
 Add the following dependency to your scalajs-react project:
  ```scala
-libraryDependencies += "com.payalabs" %%% "scalajs-react-bridge" % "0.6.0"
+libraryDependencies += "com.payalabs" %%% "scalajs-react-bridge" % "0.7.0"
 ```
 
 To use the latest snapshot version
