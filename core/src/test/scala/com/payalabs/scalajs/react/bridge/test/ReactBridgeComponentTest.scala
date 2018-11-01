@@ -9,7 +9,7 @@ import japgolly.scalajs.react.test.raw.ReactTestUtils.Simulate
 import japgolly.scalajs.react.vdom.all._
 import org.scalajs.dom.raw.Node
 import org.scalatest.FunSuite
-
+import scala.language.existentials
 import scala.scalajs.js.|
 
 
@@ -56,12 +56,12 @@ class ReactBridgeComponentTest extends FunSuite {
     )
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode.asElement.querySelector("#boolean").getAttribute("data-test") === "true")
-    assert(mounted.getDOMNode.asElement.querySelector("#byte").getAttribute("data-test") === "1")
-    assert(mounted.getDOMNode.asElement.querySelector("#short").getAttribute("data-test") === "2")
-    assert(mounted.getDOMNode.asElement.querySelector("#int").getAttribute("data-test") === "3")
-    assert(mounted.getDOMNode.asElement.querySelector("#float").getAttribute("data-test") === 5.1f.toString)
-    assert(mounted.getDOMNode.asElement.querySelector("#double").getAttribute("data-test") === 6.2.toString)
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#boolean").getAttribute("data-test") === "true")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#byte").getAttribute("data-test") === "1")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#short").getAttribute("data-test") === "2")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#int").getAttribute("data-test") === "3")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#float").getAttribute("data-test") === 5.1f.toString)
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#double").getAttribute("data-test") === 6.2.toString)
   }
 
   test("scalar properties omitted dom attr") {
@@ -72,8 +72,8 @@ class ReactBridgeComponentTest extends FunSuite {
     val testComponent = TestComponent(name = "foo", age = 25) // the implicit conversion from WithPropsNoChildren kicks in to allow skipping dom props
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode.asElement.querySelector("#name").getAttribute("data-test") === "foo")
-    assert(mounted.getDOMNode.asElement.querySelector("#age").getAttribute("data-test") === "25")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#name").getAttribute("data-test") === "foo")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#age").getAttribute("data-test") === "25")
   }
 
   test("scalar properties without a possibility to specify dom attr") {
@@ -85,8 +85,8 @@ class ReactBridgeComponentTest extends FunSuite {
     val testComponent = TestComponent(name = "foo", age = 25)
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode.asElement.querySelector("#name").getAttribute("data-test") === "foo")
-    assert(mounted.getDOMNode.asElement.querySelector("#age").getAttribute("data-test") === "25")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#name").getAttribute("data-test") === "foo")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#age").getAttribute("data-test") === "25")
   }
 
   test("scalar properties without a possibility to specify dom attr but with children") {
@@ -99,8 +99,8 @@ class ReactBridgeComponentTest extends FunSuite {
     )
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode.asElement.querySelector("#name").getAttribute("data-test") === "foo")
-    assert(mounted.getDOMNode.asElement.querySelector("#age").getAttribute("data-test") === "25")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#name").getAttribute("data-test") === "foo")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#age").getAttribute("data-test") === "25")
     assertChildren(mounted)
   }
 
@@ -113,10 +113,10 @@ class ReactBridgeComponentTest extends FunSuite {
     val testComponent = TestComponent(name = "foo", age = 25)(id := "test-id", className := "test-classname")
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode.asElement.querySelector("#name").getAttribute("data-test") === "foo")
-    assert(mounted.getDOMNode.asElement.querySelector("#age").getAttribute("data-test") === "25")
-    assert(mounted.getDOMNode.asElement.querySelector("#id").getAttribute("data-test") === "test-id")
-    assert(mounted.getDOMNode.asElement.querySelector("#className").getAttribute("data-test") === "test-classname")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#name").getAttribute("data-test") === "foo")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#age").getAttribute("data-test") === "25")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#id").getAttribute("data-test") === "test-id")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#className").getAttribute("data-test") === "test-classname")
   }
 
   test("no special properties") {
@@ -129,8 +129,8 @@ class ReactBridgeComponentTest extends FunSuite {
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
 
-    assert(mounted.getDOMNode.asElement.querySelector("#id").getAttribute("data-test") === "test-id")
-    assert(mounted.getDOMNode.asElement.querySelector("#className").getAttribute("data-test") === "test-classname")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#id").getAttribute("data-test") === "test-id")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#className").getAttribute("data-test") === "test-classname")
     assertChildren(mounted)
   }
 
@@ -141,8 +141,8 @@ class ReactBridgeComponentTest extends FunSuite {
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
 
-    assert(mounted.getDOMNode.asElement.querySelector("#id").getAttribute("data-test") === "test-id")
-    assert(mounted.getDOMNode.asElement.querySelector("#className").getAttribute("data-test") === "test-classname")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#id").getAttribute("data-test") === "test-id")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#className").getAttribute("data-test") === "test-classname")
   }
 
   test("Non-nested classes work too") {
@@ -151,10 +151,10 @@ class ReactBridgeComponentTest extends FunSuite {
     val testComponent = TestComponent(name = "foo", age = 25)(id := "test-id", className := "test-classname")
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode.asElement.querySelector("#name").getAttribute("data-test") === "foo")
-    assert(mounted.getDOMNode.asElement.querySelector("#age").getAttribute("data-test") === "25")
-    assert(mounted.getDOMNode.asElement.querySelector("#id").getAttribute("data-test") === "test-id")
-    assert(mounted.getDOMNode.asElement.querySelector("#className").getAttribute("data-test") === "test-classname")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#name").getAttribute("data-test") === "foo")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#age").getAttribute("data-test") === "25")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#id").getAttribute("data-test") === "test-id")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#className").getAttribute("data-test") === "test-classname")
   }
 
   test("union properties") {
@@ -165,8 +165,8 @@ class ReactBridgeComponentTest extends FunSuite {
     val testComponent = TestComponent(unionLeft = "foo", unionRight = 25)()
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode.asElement.querySelector("#unionLeft").getAttribute("data-test") === "foo")
-    assert(mounted.getDOMNode.asElement.querySelector("#unionRight").getAttribute("data-test") === "25")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#unionLeft").getAttribute("data-test") === "foo")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#unionRight").getAttribute("data-test") === "25")
   }
 
   test("enumeration properties") {
@@ -184,8 +184,8 @@ class ReactBridgeComponentTest extends FunSuite {
     val testComponent = TestComponent(foregroundColor = ColorEnumeration.Red, backgroundColor = ColorEnumeration.Green)()
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode.asElement.querySelector("#foregroundColor").getAttribute("data-test") === "red")
-    assert(mounted.getDOMNode.asElement.querySelector("#backgroundColor").getAttribute("data-test") === "green")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#foregroundColor").getAttribute("data-test") === "red")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#backgroundColor").getAttribute("data-test") === "green")
   }
 
   test("array properties") {
@@ -196,8 +196,8 @@ class ReactBridgeComponentTest extends FunSuite {
     val testComponent = TestComponent(names = Seq("foo", "bar"), ages = scala.collection.immutable.Seq(5,10))()
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode.asElement.querySelector("#names").getAttribute("data-test") === "[foo,bar]")
-    assert(mounted.getDOMNode.asElement.querySelector("#ages").getAttribute("data-test") === "[5,10]")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#names").getAttribute("data-test") === "[foo,bar]")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#ages").getAttribute("data-test") === "[5,10]")
   }
 
 
@@ -210,7 +210,7 @@ class ReactBridgeComponentTest extends FunSuite {
       TestComponent(map = Map[String, js.Any]("one" -> 1, "two" -> "2", "foo" -> "bar"))()
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode.asElement.querySelector("#map").getAttribute("data-test") === "{one->1,two->2,foo->bar}")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#map").getAttribute("data-test") === "{one->1,two->2,foo->bar}")
   }
 
 
@@ -222,7 +222,7 @@ class ReactBridgeComponentTest extends FunSuite {
     val testComponent = TestComponent(name = new NameType("test-name"))
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode.asElement.querySelector("#name").getAttribute("data-test") === "test-name")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#name").getAttribute("data-test") === "test-name")
   }
 
 
@@ -234,7 +234,7 @@ class ReactBridgeComponentTest extends FunSuite {
     val testComponent = TestComponent(map = Person("test-person", 10))
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode.asElement.querySelector("#map").getAttribute("data-test") === "{name->test-person,age->10}")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#map").getAttribute("data-test") === "{name->test-person,age->10}")
   }
 
   test("seq of object properties") {
@@ -244,7 +244,7 @@ class ReactBridgeComponentTest extends FunSuite {
 
     val testComponent = TestComponent(map = Seq(Person("First", 10), Person("Second", 11)))
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode.asElement.querySelector("#map").getAttribute("data-test") === "[{name->First,age->10},{name->Second,age->11}]")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#map").getAttribute("data-test") === "[{name->First,age->10},{name->Second,age->11}]")
   }
 
 
@@ -291,15 +291,15 @@ class ReactBridgeComponentTest extends FunSuite {
     something3 = false
 
     js.Dynamic.global.TestComponent.eventTestData = js.Array(1)
-    Simulate.click(mounted.getDOMNode.asElement.querySelector("#onSomething1"))
+    Simulate.click(mounted.getDOMNode.asMounted().asElement().querySelector("#onSomething1"))
     assert(something1 === true)
 
     js.Dynamic.global.TestComponent.eventTestData = js.Array(1, "two")
-    Simulate.click(mounted.getDOMNode.asElement.querySelector("#onSomething2"))
+    Simulate.click(mounted.getDOMNode.asMounted().asElement().querySelector("#onSomething2"))
     assert(something2 === true)
 
     js.Dynamic.global.TestComponent.eventTestData = js.Array(1, "two", js.Array[Any](3, "four"))
-    Simulate.click(mounted.getDOMNode.asElement.querySelector("#onSomething3"))
+    Simulate.click(mounted.getDOMNode.asMounted().asElement().querySelector("#onSomething3"))
     assert(something3 === true)
   }
 
@@ -343,15 +343,15 @@ class ReactBridgeComponentTest extends FunSuite {
     something3 = false
 
     js.Dynamic.global.TestComponent.eventTestData = js.Array(1)
-    Simulate.click(mounted.getDOMNode.asElement.querySelector("#onSomething1"))
+    Simulate.click(mounted.getDOMNode.asMounted().asElement().querySelector("#onSomething1"))
     assert(something1 === true)
 
     js.Dynamic.global.TestComponent.eventTestData = js.Array(1, "two")
-    Simulate.click(mounted.getDOMNode.asElement.querySelector("#onSomething2"))
+    Simulate.click(mounted.getDOMNode.asMounted().asElement().querySelector("#onSomething2"))
     assert(something2 === true)
 
     js.Dynamic.global.TestComponent.eventTestData = js.Array(1, "two", js.Array[Any](3, "four"))
-    Simulate.click(mounted.getDOMNode.asElement.querySelector("#onSomething3"))
+    Simulate.click(mounted.getDOMNode.asMounted().asElement().querySelector("#onSomething3"))
     assert(something3 === true)
   }
 
@@ -363,8 +363,8 @@ class ReactBridgeComponentTest extends FunSuite {
     val testComponent = TestComponent(name = "foo", age = 25)()
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    assert(mounted.getDOMNode.asElement.querySelector("#name").getAttribute("data-test") === "foo")
-    assert(mounted.getDOMNode.asElement.querySelector("#age").getAttribute("data-test") === "25")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#name").getAttribute("data-test") === "foo")
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#age").getAttribute("data-test") === "25")
   }
 
   test("undefined props do not get passed to the underlying component") {
@@ -375,9 +375,9 @@ class ReactBridgeComponentTest extends FunSuite {
     val testComponent = TestComponent(age = 25)
 
     val mounted = ReactTestUtils.renderIntoDocument(testComponent)
-    println(mounted.getDOMNode.asElement.outerHTML)
-    assert(mounted.getDOMNode.asElement.querySelector("#name") == null)
-    assert(mounted.getDOMNode.asElement.querySelector("#age").getAttribute("data-test") === "25")
+    println(mounted.getDOMNode.asMounted().asElement().outerHTML)
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#name") == null)
+    assert(mounted.getDOMNode.asMounted().asElement().querySelector("#age").getAttribute("data-test") === "25")
   }
 
   test("supplied key") {
@@ -394,7 +394,7 @@ class ReactBridgeComponentTest extends FunSuite {
 
   // Assumes that the children are ("textChild", span("spanChild"))
   private def assertChildren(mounted: MountedOutput): Unit = {
-    val childNodes = mounted.getDOMNode.asElement.querySelector("#children").childNodes
+    val childNodes = mounted.getDOMNode.asMounted().asElement().querySelector("#children").childNodes
 
     var assertions = 0
     for (i <- 0 until childNodes.length) {
