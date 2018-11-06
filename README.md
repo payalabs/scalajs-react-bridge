@@ -58,7 +58,7 @@ resolvers += Resolver.sonatypeRepo("snapshots")
 
 2. Add the following dependency to your scalajs-react project:
  ```scala
-libraryDependencies += "com.payalabs" %%% "scalajs-react-bridge" % "0.7.0-SNAPSHOT"
+libraryDependencies += "com.payalabs" %%% "scalajs-react-bridge" % "0.7.1-SNAPSHOT"
 ```
 
 ## Defining components
