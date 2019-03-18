@@ -5,7 +5,7 @@ val reactV = "16.5.1"
 organization := "com.payalabs"
 name := "scalajs-react-bridge"
 
-version := "0.7.1-SNAPSHOT"
+version := "0.8.0"
 
 crossScalaVersions := Seq("2.12.8", "2.11.12")
 scalaVersion := crossScalaVersions.value.head
