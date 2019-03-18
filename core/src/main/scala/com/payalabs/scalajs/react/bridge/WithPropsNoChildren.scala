@@ -2,8 +2,6 @@ package com.payalabs.scalajs.react.bridge
 
 import scala.language.implicitConversions
 
-import japgolly.scalajs.react.vdom.Implicits._
-
 import japgolly.scalajs.react.vdom.{TagMod, VdomElement}
 
 import scala.scalajs.js

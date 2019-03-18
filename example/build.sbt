@@ -4,12 +4,12 @@ organization := "com.payalabs"
 name := "scalajs-react-bridge-example"
 version := "0.7.1-SNAPSHOT"
 
-crossScalaVersions := Seq("2.12.2", "2.11.12")
+crossScalaVersions := Seq("2.12.8", "2.11.12")
 scalaVersion := crossScalaVersions.value.head
 
 libraryDependencies ++= {
   val scalaJsDom = "0.9.6"
-  val scalaJsReact = "1.3.1"
+  val scalaJsReact = "1.4.0"
 
   Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,
