@@ -9,7 +9,7 @@ scalaVersion := crossScalaVersions.value.head
 
 libraryDependencies ++= {
   val scalaJsDom = "0.9.6"
-  val scalaJsReact = "1.4.0"
+  val scalaJsReact = "1.4.2"
 
   Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value,

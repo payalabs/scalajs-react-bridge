@@ -16,7 +16,7 @@ dependencyOverrides += "org.webjars.npm" % "js-tokens" % "3.0.2"
 
 libraryDependencies ++= {
   val scalaJsDomV = "0.9.6"
-  val scalaJsReactV = "1.4.0"
+  val scalaJsReactV = "1.4.2"
   val scalatestV = "3.0.1"
 
   Seq(
