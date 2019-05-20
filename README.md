@@ -90,6 +90,23 @@ If a component cannot follow the expected conventions, it can override them as f
 - If overriding `componentName` and/or `componentNamespace` isn't sufficient, you may override `jsComponent` to supply the component function.
 - If an apply method's parameters require transformation beyond what is implemented by the macros, don't use the macros as their implementation. Instead, supply your own implementation, which may still use the `jsComponent` after transforming the method parameters appropriately.
 
+### Imports from other JavaScript modules
+
+To import modules from NPM dependency, take a look at the following example:
+
+```scala
+object ReactBootstrapButton extends ReactBridgeComponent {
+
+  @JSImport("react-bootstrap/Button", JSImport.Default)
+  @js.native
+  object RawComponent extends js.Object
+
+  override lazy val componentValue = RawComponent
+
+  def apply(variant: js.UndefOr[String] = js.undefined): WithProps = auto
+}
+```
+
 ### Special cases
 
 #### Passing DOM attributes to component
