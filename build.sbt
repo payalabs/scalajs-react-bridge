@@ -7,7 +7,7 @@ val core = project in file("core")
 crossScalaVersions := Seq("2.12.2", "2.11.12")
 scalaVersion := crossScalaVersions.value.head
 
-version := "0.8.1-SNAPSHOT"
+version := "0.8.1"
 
 publishTo in ThisBuild := Some("sonatype-staging" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
 
