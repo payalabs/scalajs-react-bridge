@@ -2,7 +2,7 @@ enablePlugins(ScalaJSPlugin)
 
 organization := "com.payalabs"
 name := "scalajs-react-bridge-example"
-version := "0.8.1"
+version := "0.8.2-SNAPSHOT"
 
 crossScalaVersions := Seq("2.12.8", "2.11.12")
 scalaVersion := crossScalaVersions.value.head
