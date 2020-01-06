@@ -7,7 +7,7 @@ name := "scalajs-react-bridge"
 
 version := "0.8.2-SNAPSHOT"
 
-crossScalaVersions := Seq("2.12.8", "2.11.12")
+crossScalaVersions := Seq("2.13.1", "2.12.10")
 scalaVersion := crossScalaVersions.value.head
 
 scalacOptions := Seq("-unchecked", "-deprecation", "-feature")
@@ -15,9 +15,9 @@ scalacOptions := Seq("-unchecked", "-deprecation", "-feature")
 dependencyOverrides += "org.webjars.npm" % "js-tokens" % "3.0.2"
 
 libraryDependencies ++= {
-  val scalaJsDomV = "0.9.6"
-  val scalaJsReactV = "1.4.2"
-  val scalatestV = "3.0.1"
+  val scalaJsDomV = "0.9.8"
+  val scalaJsReactV = "1.5.0"
+  val scalatestV = "3.0.8"
 
   Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value % Provided,

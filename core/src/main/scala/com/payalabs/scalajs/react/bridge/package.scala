@@ -4,13 +4,12 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.language.experimental.macros
 import scala.reflect.ClassTag
 import scala.scalajs.js
-import scala.scalajs.js.JSConverters.{JSRichFutureNonThenable, JSRichOption}
+import scala.scalajs.js.JSConverters._
 import scala.scalajs.js.{Object, |}
 
 import japgolly.scalajs.react.component.Js
 import japgolly.scalajs.react.vdom.{TagMod, VdomElement, VdomNode}
 import japgolly.scalajs.react.{CallbackTo, Children, CtorType}
-
 import japgolly.scalajs.react.vdom.Implicits._
 
 package object bridge extends GeneratedImplicits {
@@ -49,10 +48,10 @@ package object bridge extends GeneratedImplicits {
   implicit def enumerationWriter[T <: Enumeration#Value]: JsWriter[T] =
     JsWriter(_.toString)
 
-  implicit def seqWriter[T: JsWriter]: JsWriter[Seq[T]] = {
+  implicit def baseSeqWriter[T: JsWriter]: JsWriter[scala.collection.Seq[T]] = {
     val elementWriter = implicitly[JsWriter[T]]
 
-    JsWriter((value: Seq[T]) => js.Array(value.map(e => elementWriter.toJs(e)): _*))
+    JsWriter(_.map(elementWriter.toJs).toJSArray)
   }
 
   implicit def immutableSeqWriter[T : JsWriter]: JsWriter[scala.collection.immutable.Seq[T]] = {

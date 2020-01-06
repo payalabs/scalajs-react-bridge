@@ -4,7 +4,7 @@ enablePlugins(ScalaJSPlugin)
 
 val core = project in file("core")
 
-crossScalaVersions := Seq("2.12.2", "2.11.12")
+crossScalaVersions := Seq("2.13.1", "2.12.10")
 scalaVersion := crossScalaVersions.value.head
 
 version := "0.8.2-SNAPSHOT"
