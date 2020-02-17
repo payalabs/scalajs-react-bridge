@@ -39,11 +39,15 @@ package object bridge extends GeneratedImplicits {
   implicit def optionWriter[A](implicit writerA: JsWriter[A]): JsWriter[Option[A]] =
     JsWriter(_.map(writerA.toJs).orUndefined)
 
-  implicit def unionWriter[A : ClassTag, B : ClassTag](implicit writerA: JsWriter[A], writerB: JsWriter[B]): JsWriter[A | B] =
-    JsWriter({
-      case value: A => writerA.toJs(value)
-      case value: B => writerB.toJs(value)
-    })
+  implicit def unionWriter[A, B](implicit A: ClassTag[A],
+                                 writerA: JsWriter[A],
+                                 B: ClassTag[B],
+                                 writerB: JsWriter[B]): JsWriter[A | B] =
+    JsWriter { value =>
+      A.unapply(value).map(writerA.toJs)
+        .orElse(B.unapply(value).map(writerB.toJs))
+        .getOrElse(throw new RuntimeException(s"Value $value of type ($A | $B) matched neither}"))
+    }
 
   implicit def enumerationWriter[T <: Enumeration#Value]: JsWriter[T] =
     JsWriter(_.toString)
