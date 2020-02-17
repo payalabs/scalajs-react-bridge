@@ -102,6 +102,8 @@ object ReactBridgeComponent {
         val paramType = c.typecheck(Ident(param.name)).tpe
         val converted = {
           val conv = c.inferImplicitValue(appliedType(typeOf[JsWriter[_]], paramType :: Nil))
+          if(conv.isEmpty)
+            c.error(c.enclosingPosition, s"Could not find an implicit JsWriter[$paramType]")
           q"$conv.toJs(${param.name.toTermName})"
         }
         (param.name.toString, converted)
