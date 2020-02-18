@@ -1,6 +1,7 @@
-jdk:
-  - oraclejdk8
 language: scala
+jdk:
+  - openjdk8
 script:
+  - nvm install 12
   - npm install jsdom
   - sbt +test

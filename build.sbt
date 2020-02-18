@@ -1,23 +1,25 @@
-import sbt.Keys.publishLocal
-
 enablePlugins(ScalaJSPlugin)
 
-val core = project in file("core")
+ThisBuild / version := "0.8.2-SNAPSHOT"
 
-crossScalaVersions := Seq("2.12.2", "2.11.12")
-scalaVersion := crossScalaVersions.value.head
-
-version := "0.8.2-SNAPSHOT"
+ThisBuild / crossScalaVersions := Seq("2.13.1", "2.12.10")
+ThisBuild / scalaVersion := crossScalaVersions.value.head
 
 publishTo in ThisBuild := Some("sonatype-staging" at "https://oss.sonatype.org/service/local/staging/deploy/maven2")
 
-val example = (project in file("example")).dependsOn(core).settings(
-  skip in publish := true
-)
+val core =
+  project
 
-val scalaJsReactBridge = (project in file(".")).aggregate(
-  core,
-  example
-).settings(
-  skip in publish := true
-)
+val example =
+  project
+    .dependsOn(core)
+    .settings(
+      skip in publish := true
+    )
+
+val scalaJsReactBridge =
+  (project in file("."))
+    .aggregate(core, example)
+    .settings(
+      skip in publish := true
+    )

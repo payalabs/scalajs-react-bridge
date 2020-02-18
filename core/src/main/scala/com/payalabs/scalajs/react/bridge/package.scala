@@ -4,13 +4,12 @@ import scala.concurrent.{ExecutionContext, Future}
 import scala.language.experimental.macros
 import scala.reflect.ClassTag
 import scala.scalajs.js
-import scala.scalajs.js.JSConverters.{JSRichFutureNonThenable, JSRichOption}
+import scala.scalajs.js.JSConverters._
 import scala.scalajs.js.{Object, |}
 
 import japgolly.scalajs.react.component.Js
 import japgolly.scalajs.react.vdom.{TagMod, VdomElement, VdomNode}
 import japgolly.scalajs.react.{CallbackTo, Children, CtorType}
-
 import japgolly.scalajs.react.vdom.Implicits._
 
 package object bridge extends GeneratedImplicits {
@@ -40,19 +39,23 @@ package object bridge extends GeneratedImplicits {
   implicit def optionWriter[A](implicit writerA: JsWriter[A]): JsWriter[Option[A]] =
     JsWriter(_.map(writerA.toJs).orUndefined)
 
-  implicit def unionWriter[A : ClassTag, B : ClassTag](implicit writerA: JsWriter[A], writerB: JsWriter[B]): JsWriter[A | B] =
-    JsWriter({
-      case value: A => writerA.toJs(value)
-      case value: B => writerB.toJs(value)
-    })
+  implicit def unionWriter[A, B](implicit A: ClassTag[A],
+                                 writerA: JsWriter[A],
+                                 B: ClassTag[B],
+                                 writerB: JsWriter[B]): JsWriter[A | B] =
+    JsWriter { value =>
+      A.unapply(value).map(writerA.toJs)
+        .orElse(B.unapply(value).map(writerB.toJs))
+        .getOrElse(throw new RuntimeException(s"Value $value of type ($A | $B) matched neither}"))
+    }
 
   implicit def enumerationWriter[T <: Enumeration#Value]: JsWriter[T] =
     JsWriter(_.toString)
 
-  implicit def seqWriter[T: JsWriter]: JsWriter[Seq[T]] = {
+  implicit def baseSeqWriter[T: JsWriter]: JsWriter[scala.collection.Seq[T]] = {
     val elementWriter = implicitly[JsWriter[T]]
 
-    JsWriter((value: Seq[T]) => js.Array(value.map(e => elementWriter.toJs(e)): _*))
+    JsWriter(_.map(elementWriter.toJs).toJSArray)
   }
 
   implicit def immutableSeqWriter[T : JsWriter]: JsWriter[scala.collection.immutable.Seq[T]] = {
