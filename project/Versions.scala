@@ -1,4 +1,4 @@
 object Versions {
   val scalaJsDom = "0.9.8"
-  val scalaJsReact = "1.5.0"
+  val scalaJsReact = "1.6.0"
 }
