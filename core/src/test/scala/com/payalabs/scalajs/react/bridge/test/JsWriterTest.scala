@@ -5,10 +5,10 @@ import scala.scalajs.concurrent.JSExecutionContext.Implicits.queue
 import scala.scalajs.js
 
 import com.payalabs.scalajs.react.bridge._
-import org.scalatest.FunSuite
+import org.scalatest.funsuite.AnyFunSuite
 
 
-class JsWriterTest extends FunSuite {
+class JsWriterTest extends AnyFunSuite {
   test("unionWriter") {
     val writer = unionWriter[Seq[String], Future[String]]
     val value1 = Seq("hello", "goodbye")
