@@ -8,9 +8,9 @@ import japgolly.scalajs.react.test.ReactTestUtils.MountedOutput
 import japgolly.scalajs.react.test.raw.ReactTestUtils.Simulate
 import japgolly.scalajs.react.vdom.all._
 import org.scalajs.dom.raw.Node
-import org.scalatest.FunSuite
 import scala.language.existentials
 import scala.scalajs.js.|
+import org.scalatest.funsuite.AnyFunSuite
 
 
 class NameType(val name :String) extends AnyVal
@@ -33,7 +33,7 @@ object TestComponent extends ReactBridgeComponent {
   def apply(name: js.UndefOr[String] = js.undefined, age: js.UndefOr[Int] = js.undefined): WithPropsNoChildren = this.autoNoChildren
 }
 
-class ReactBridgeComponentTest extends FunSuite {
+class ReactBridgeComponentTest extends AnyFunSuite {
 
   test("all primitive types supported") {
     object TestComponent extends ReactBridgeComponent {
