@@ -8,6 +8,7 @@ import js.Dynamic.global
 import japgolly.scalajs.react._
 import japgolly.scalajs.react.vdom.VdomElement
 
+
 /**
  * See project's [README.md](https://github.com/payalabs/scalajs-react-bridge)
  */
@@ -37,7 +38,7 @@ abstract class ReactBridgeComponent {
 
   protected lazy val componentValue: js.Any = {
     val componentPrefixes = if (componentNamespace.trim.isEmpty) Array[String]() else componentNamespace.split('.')
-    (componentPrefixes :+ componentName).foldLeft(global)(_ selectDynamic _)
+    (componentPrefixes :+ componentName).foldLeft(global.globalThis)(_ selectDynamic _)
   }
 
   protected lazy val jsComponent: JsComponentType = JsComponent[js.Object, Children.Varargs, Null](componentValue)
