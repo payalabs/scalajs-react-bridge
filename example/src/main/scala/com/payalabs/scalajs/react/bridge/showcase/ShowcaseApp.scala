@@ -7,8 +7,8 @@ import org.scalajs.dom
 
 import scala.scalajs.js
 
-object ShowcaseApp extends js.JSApp {
-  def main(): Unit = {
+object ShowcaseApp {
+  def main(args: Array[String]): Unit = {
     ShowcaseComponent().renderIntoDOM(dom.document.getElementById("app-container"))
   }
 }
