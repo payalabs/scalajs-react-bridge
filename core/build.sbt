@@ -1,6 +1,7 @@
 enablePlugins(ScalaJSPlugin)
+enablePlugins(JSDependenciesPlugin)
 
-val reactV = "16.5.1"
+val reactV = "16.13.1"
 
 organization := "com.payalabs"
 name := "scalajs-react-bridge"
@@ -10,7 +11,7 @@ scalacOptions := Seq("-unchecked", "-deprecation", "-feature")
 dependencyOverrides += "org.webjars.npm" % "js-tokens" % "3.0.2"
 
 libraryDependencies ++= {
-  val scalatestV = "3.1.2"
+  val scalatestV = "3.2.0"
 
   Seq(
     "org.scala-lang" % "scala-reflect" % scalaVersion.value % Provided,
