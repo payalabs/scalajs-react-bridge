@@ -1,6 +1,6 @@
 enablePlugins(ScalaJSPlugin)
 
-ThisBuild / version := "0.8.3-SNAPSHOT"
+ThisBuild / version := "0.8.4"
 
 ThisBuild / crossScalaVersions := Seq("2.13.3", "2.12.12")
 ThisBuild / scalaVersion := crossScalaVersions.value.head
