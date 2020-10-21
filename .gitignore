@@ -7,3 +7,4 @@ target/
 bower_components/
 node_modules/
 example/dist
+.bsp/
