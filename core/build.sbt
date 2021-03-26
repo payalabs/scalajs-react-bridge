@@ -1,7 +1,7 @@
 enablePlugins(ScalaJSPlugin)
 enablePlugins(JSDependenciesPlugin)
 
-val reactV = "16.14.0"
+val reactV = "17.0.2"
 
 organization := "com.payalabs"
 name := "scalajs-react-bridge"
